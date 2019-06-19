@@ -1,0 +1,1240 @@
+<html>
+
+<head>
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    html,
+    body {
+      user-select: none;
+      -moz-user-select: none;
+      font-family: arial, helvetica;
+      background-color: #21252b;
+      margin: 0;
+      font-size: 35px;
+      color: #dadada;
+      /* color: #000; */
+      height: 100%;
+    }
+
+    body * {
+      box-sizing: border-box;
+    }
+
+    #arriba {
+      position: relative;
+      height: 100px;
+      border-bottom: 2px solid #16191d;
+    }
+
+    #medio {
+      position: relative;
+      height: 400px;
+      border-bottom: 2px solid #16191d;
+      background-color: #2c3139;
+    }
+
+    #preguntadoHead {
+      display: flex;
+      flex-direction: row;
+      background-color: #242930;
+      border-bottom: 2px solid #16191d;
+      height: 5%;
+      margin-right: 4px;
+    }
+
+    #abajo {
+      position: relative;
+      height: calc(95% - 500px);
+      font-size: 1.5vh;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #aaa;
+      border-radius: 8px;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #preguntas {
+      height: 100%;
+    }
+
+    .cinto {
+      position: relative;
+      user-select: none;
+      cursor: pointer;
+      background-color: #373e48;
+      box-shadow: rgba(0, 0, 0, 1) 0px 1px 8px 0px;
+      width: 6vw;
+      height: 40px;
+    }
+
+    .cinto>.name {
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      color: goldenrod;
+      font-size: 0.8em;
+      border: 2px solid rgba(125, 125, 125, 0.5)
+    }
+
+    .cinto>.name.namedan{
+      border: 2px solid goldenrod;
+    }
+
+    .cinto>.color {
+      border-top: 20px solid white;
+      border-bottom: 20px solid white;
+    }
+
+    .cinto:hover {
+      color: white;
+    }
+
+    .btn {
+      user-select: none;
+      -moz-user-select: none;
+      padding: 1vh 1vw;
+      user-select: none;
+      background-color: #2d3746;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.15s;
+      text-transform: capitalize;
+      border-radius: 3px;
+      box-shadow: rgba(0, 0, 0, 1) 0px 1px 8px 0px;
+      margin: 6px 6px;
+      border: 2px solid rgba(255, 255, 255, 0.3)
+    }
+
+    .btn.bal {
+      background-color: #4d0b0b;
+    }
+
+    .btn.son {
+      background-color: rgb(6, 41, 94);
+    }
+
+    .btn.pum {
+      background-color: rgb(83, 9, 49);
+    }
+
+    .btn.reiniciar {
+      background-color: #004042;
+    }
+
+    .btn:active,
+    .btn:hover {
+      background-color: rgb(44, 107, 150)
+    }
+
+    .btn.bal:hover,
+    .btn.bal:active {
+      background-color: #860000;
+    }
+
+    .btn.son:hover,
+    .btn.son:active {
+      background-color: rgb(0, 56, 141);
+    }
+
+    .btn.pum:hover,
+    .btn.pum:active {
+      background-color: rgb(124, 0, 66);
+    }
+
+    .btn.reiniciar:hover,
+    .btn.reiniciar:active {
+      background-color: #006c70;
+    }
+
+
+    #cinturones {
+      height: 100%;
+    }
+
+    #cinturonesTop {
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding-top:5px;
+    }
+
+    #cinturonesBot {
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .botones {
+      margin: 0 10px;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .botones>* {
+      flex-grow: 1;
+    }
+
+    #cinturonesTop>*,
+    #cinturonesBot>* {
+      margin: 0 4px;
+    }
+
+    #pregunta {
+      padding:20px 0 0 20px;
+      text-transform: capitalize;
+      font-size: 1.7em;
+    }
+
+    #imagen {
+      position: relative;
+      box-sizing: border-box;
+      margin: 30px;
+      flex-grow: 2;
+      height: 0;
+    }
+
+    #imagen>img {
+      box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      height: 100%;
+    }
+
+    #preguntado {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: stretch;
+      height: 100%;
+    }
+
+
+    #preguntadoHead>div {
+      flex: 1;
+      border-left: 1px solid #14171a;
+      padding-top: 2px;
+    }
+
+    #preguntadoHead div {
+      text-align: center;
+    }
+
+    [data-cinturon=blanco-amarillo]>.color {
+      border-top-color: #FFFFFF;
+      border-bottom-color: #FBC02D;
+    }
+
+    [data-cinturon=amarillo]>.color {
+      border-top-color: #FBC02D;
+      border-bottom-color: #FBC02D;
+    }
+
+    [data-cinturon=amarillo-naranja]>.color {
+      border-top-color: #FBC02D;
+      border-bottom-color: #FB8C00;
+    }
+
+    [data-cinturon=naranja]>.color {
+      border-top-color: #FB8C00;
+      border-bottom-color: #FB8C00;
+    }
+
+    [data-cinturon=naranja-verde]>.color {
+      border-top-color: #FB8C00;
+      border-bottom-color: #43A047;
+    }
+
+    [data-cinturon=verde]>.color {
+      border-top-color: #43A047;
+      border-bottom-color: #43A047;
+    }
+
+    [data-cinturon=verde-azul]>.color {
+      border-top-color: #43A047;
+      border-bottom-color: #1565C0;
+    }
+
+    [data-cinturon=azul]>.color {
+      border-top-color: #1565C0;
+      border-bottom-color: #1565C0;
+    }
+
+    [data-cinturon=azul-rojo]>.color {
+      border-top-color: #1565C0;
+      border-bottom-color: #f44336;
+    }
+
+    [data-cinturon=rojo]>.color {
+      border-top-color: #f44336;
+      border-bottom-color: #f44336;
+    }
+
+    [data-cinturon=segundo-dan]>.color {
+      border-top-color: #000000;
+      border-bottom-color: #000000;
+    }
+
+    [data-cinturon=tercer-dan]>.color {
+      border-top-color: #000000;
+      border-bottom-color: #000000;
+    }
+
+    [data-cinturon=cuarto-dan]>.color {
+      border-top-color: #000000;
+      border-bottom-color: #000000;
+    }
+
+    [data-cinturon=quinto-dan]>.color {
+      border-top-color: #000000;
+      border-bottom-color: #000000;
+    }
+
+    .tit-historia {
+      flex-grow: 1;
+      width: 0;
+      counter-reset: section;
+      background-color: #21252B;
+      border-right: 1px solid #16191d;
+      padding: 3px 0;
+    }
+
+    .tit-historia:nth-child(even) {
+      background-color: rgb(36, 42, 53);
+    }
+
+    .tit-historia>.tit {
+      text-transform: capitalize;
+      background-color: #2c3139;
+      padding: 5px;
+      text-align: center;
+      border-bottom: 2px solid #16191d;
+    }
+
+    .tit-historia>.tec {
+      padding: 0px 3px;
+    }
+
+    .tit-historia>.tec::before {
+      counter-increment: section;
+      content: counter(section) ". ";
+    }
+
+    #cintosel {
+      font-size: 0.9em;
+      text-transform: capitalize;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+
+  <script>
+    var tecnicas = {
+      "blanco-amarillo": {
+        "sogui": [
+          "Orun Sogui",
+          "Uen Sogui"
+        ],
+        "maki": [
+          "Are Maki",
+          "Momtong Maki"
+        ],
+        "gongkiok": [
+          "Momtong Bande Jirugui"
+        ],
+        "pum": [
+          "Chariot"
+        ],
+        "chagui": [
+          "Ap Chagui",
+          "Bandal Chagui"
+        ]
+      },
+      "amarillo": {
+        "sogui": [
+          "Ap Sogui",
+          "Ap Kubi Sogui"
+        ],
+        "maki": [
+          "Momtong An Maki",
+          "Olgul Maki"
+        ],
+        "gongkiok": [
+          "Momtong Baro Jirugui",
+          "Olgul Bande Jirugui",
+        ],
+        "pum": [
+          "Kibon Chumbi",
+        ],
+        "chagui": [
+          "Yop Chagui",
+          "Dollyo Chagui",
+        ]
+      },
+      "amarillo-naranja": {
+        "sogui": [
+          "Chuchum Sogui"
+        ],
+        "maki": [
+          "Jansonnal Momtong Bakat Maki",
+        ],
+        "gongkiok": [
+          "Momtong Dubong Jirugui",
+        ],
+        "pum": [],
+        "chagui": [
+          "Tuit Chagui"
+        ]
+      },
+      "naranja": {
+        "sogui": [
+          "Tuit Kubi Sogui",
+        ],
+        "maki": [
+          "Sonnal Momtong Maki",
+        ],
+        "gongkiok": [
+          "Sonnal An Chigui",
+          "Pioson Kut Seuo Chirugui",
+        ],
+        "pum": [
+          "Chebipum Mok Chigui",
+        ],
+        "chagui": [
+          "Nacko Chagui",
+          "Neryo Chagui",
+        ]
+      },
+      "naranja-verde": {
+        "sogui": [
+          "Pionji Sogui"
+        ],
+        "maki": [
+          "Momtong Bakat Maki"
+        ],
+        "gongkiok": [
+          "Dung Chumok Ape Chigui"
+        ],
+        "pum": [],
+        "chagui": [
+          "Furio Chagui",
+          "Bakat Dari Furigui",
+          "An Dari Furigui"
+        ]
+      },
+      "verde": {
+        "sogui": [
+          "Tuit Koa Sogui"
+        ],
+        "maki": [],
+        "gongkiok": [
+          "Me chumok Neryo Yop Chigui",
+          "Palkup Dollyo Chigui"
+        ],
+        "pum": [
+          "Momtong Piochok Palkup Chigui"
+        ],
+        "chagui": [
+          "Mom Dollyo Yop Chagui",
+          "Mom Dollyo Tuit Chagui"
+        ]
+      },
+      "verde-azul": {
+        "sogui": [
+          "Naranji Sogui"
+        ],
+        "maki": [
+          "Olgul Bakat Maki",
+          "Gechio Are maki",
+          "Batagson Momtong Maki"
+        ],
+        "gongkiok": [],
+        "pum": [
+          "Bituro Jansonnal Olgul Bakat Maki"
+        ],
+        "chagui": [
+          "Mom Dollyo Nacko Chagui"
+        ]
+      },
+      "azul": {
+        "sogui": [
+          "Moa Sogui",
+          "Bom Sogui"
+        ],
+        "maki": [
+          "Batagson Momtong An Maki",
+          "Sonnal Are Maki",
+          "Okgoro Are Maki"
+        ],
+        "gongkiok": [
+          "Yop Jirugui",
+        ],
+        "pum": [
+          "Bo Chumok Chumbi"
+        ],
+        "chagui": [
+          "Mom Dollyo Furio Chagui",
+          "Tuio Ap Chagui"
+        ]
+      },
+      "azul-rojo": {
+        "sogui": [],
+        "maki": [
+          "Goduro Batagson Momtong An Maki",
+          "Gechio Momtong Maki"
+        ],
+        "gongkiok": [
+          "Dung Chumok Bakat Chigui",
+          "Du Checho Jirugui",
+        ],
+        "pum": [
+          "Gawi Maki",
+          "Dangkio Ollyo Murup Chigui",
+          "Piochok Chagui"
+        ],
+        "chagui": [
+          "Tuio Yop Chagui",
+          "Tuio Dollyo Chagui"
+        ]
+      },
+      "rojo": {
+        "sogui": [
+
+        ],
+        "maki": [
+          "Jansonnal Momtong Yop Maki",
+          "Goduro Momtong Maki",
+          "Goduro Are Maki",
+        ],
+        "gongkiok": [
+
+        ],
+        "pum": [
+          "Oe Santul Maki",
+          "Dangkio Tok Jirugui"
+        ],
+        "chagui": [
+          "Tuio Mom Dollyo Tuit Chagui",
+          "Tuio Mom Dollyo Yop Chagui"
+        ]
+      },
+      "segundo-dan": {
+        "sogui": [
+          "Jakdari Sogui"
+        ],
+        "maki": [
+          "Jansonnal Are Maki",
+          "Nulo Maki",
+          "An Palmok Gechio Momtong Maki",
+          "Jansonnal Momtong Maki"
+        ],
+        "gongkiok": [
+          "Sonnal Bakat Chigui",
+          "Palkup Yop Chigui",
+          "Sonnal Mok Chigui"
+        ],
+        "pum": [
+          "Tong Milgui Chumbi",
+          "Akumson Kalchebi",
+          "Murup Koki",
+          "Piochok Jirugui",
+          "Chagun Dol Chogui",
+          "Dangkio Are Pionson Kut Checho Chirugui",
+          "Me Chumok Are Piochok Chigui",
+          "Batagson Tok Chigui",
+          "Kumgang Maki",
+          "Kun Dol Chogui",
+          "Santul Maki"
+        ],
+        "chagui": [
+          "Tuio Mom Dollyo Nacko Chagui",
+          "Tuio Mom Dollyo Furio Chagui"
+        ]
+      },
+      "tercer-dan": {
+        "sogui": [
+          "Ap Koa Sogui"
+        ],
+        "maki": [
+          "Sonnal Gechio Are Maki",
+          "An Palmok Goduro Olgul Yop Maki"
+        ],
+        "gongkiok": [
+          "Palkup Ollyo Chigui"
+        ],
+        "pum": [
+          "Kolcho Maki",
+          "An Palmok Kumgang Momtong Maki",
+          "Kiopson Chumbi",
+          "Mohe Chigui",
+          "Gechio Santul Maki",
+          "Dangkio Dung Chumok Ape Chigui"
+        ],
+        "chagui": [
+          "Tuio Noppy Chagui",
+          "Tuio Gawi Chagui"
+        ]
+      },
+      "cuarto-dan": {
+        "sogui": [
+        ],
+        "maki": [
+          "Sonnal Dung Gechio Momtong Maki",
+          "Goduro Sonnal Dung Momtong Bakat Maki",
+          "Sonnal Okgoro Are Maki",
+          "An Palmok Momtong Bakat Maki",
+          "Jansonnal Olgul Maki",
+          "Yop Are Maki",
+          "An Palmok Goduro Momtong Maki"
+        ],
+        "gongkiok": [
+          "Pionson Kut Opo Chirugui",
+          "Bam Chumok Sosum Chigui"
+        ],
+        "pum": [
+          "Hwangso Maki",
+          "Sonbadak Goduro An Palmok Momtong Bakat Maki",
+          "Bawi Milgui",
+          "Gorro Olligui",
+          "Chetdari Jirugui",
+          "Kumgang Ap Jirugui",
+          "Me Chumok Yop Momtong Piochok Chigui",
+          "Nalgue Piogui",
+          "Bituro Jansonnal Momtong Bakat Maki",
+          "An Palmok Bituro Momtong Bakat Maki",
+          "Kumgang Yop Jirugui",
+          "Sonnal Oe Santul Maki",
+          "Taesan Milgui"
+        ],
+        "chagui": [
+          "Tuio Ilya Chagui",
+          "Modumbal Ap Chagui",
+          "Modumbal Yop Chagui"
+        ]
+      },
+      "quinto-dan": {
+        "sogui": [
+          "Kiotari Sogui",
+          "Ogum Sogui"
+
+        ],
+        "maki": [
+          "Okgoro Olgul Maki",
+          "Sonnal Oe Santul Maki"
+        ],
+        "gongkiok": [
+          "Du Me Chumok Yang Yopguri Chigui"
+        ],
+        "pum": [
+          "An Palmok Are Piochok Maki",
+          "Sonnal Kumgang Are Maki",
+          "Oe Santul Yop Chagui",
+          "Du Chumok Jori Chumbi"
+        ],
+        "chagui": [
+        ]
+      }
+    };
+
+    function forEachTecnica(fn) {
+      for (let tipo in tecnicas) {
+        for (let cinto in tecnicas[tipo]) {
+          for (let i = 0; i < tecnicas[tipo][cinto].length; i++) {
+            let tecnica = tecnicas[tipo][cinto][i]
+            fn(tecnica)
+          }
+        }
+      }
+    }
+    var audioMap = {}
+    forEachTecnica((tecnica) => {
+      let aux = tecnica.replace(/ /g, '-')
+      var audio = new Audio(`sound/${aux}.mp3`)
+      audio.onloadedmetadata = () => {
+        audioMap[tecnica] = audio
+      }
+    })
+  </script>
+</head>
+
+<body>
+  <svg style="display:none;">
+    <symbol id="cinturonsvg" viewBox="0 0 478.619 186.388">
+      <g class="subsvgstroke" stroke="#000000" stroke-width="4">
+        <path d="M192.044,47.68c0,0-1.475,4.952,0.21,7.375
+        c1.686,2.423,24.86,1.791,24.86,1.791l-11.27-10.219L192.044,47.68z" />
+        <path class="subsvgizq" d="M9.831,24.824c0,0,119.181,32.087,233.779,32.087
+        c114.598,0,214.679-51.187,218.5-53.479c3.819-2.292,12.987,38.963,0.765,48.131c-12.225,9.168-80.983,48.896-216.208,48.896
+        c-135.226,0-233.015-21.392-239.892-29.032C-0.101,63.787-0.101,33.228,9.831,24.824z" />
+        <path d="M252.014,127.962c0,0-22.156-6.112-28.268-21.392
+        c-6.111-15.279,58.827-29.795,58.827-29.795l-6.112,31.324L252.014,127.962z" />
+        <path d="M195.479,104.278c0,0,30.56,21.392,35.143,19.1
+        c4.584-2.292,58.827-36.671,58.827-36.671L243.61,53.091l-50.423,38.2L195.479,104.278z" />
+        <path d="M22.818,153.938
+        c0,0,125.293-76.398,200.928-106.958c75.635-30.56,30.56,29.031,30.56,29.031s-78.69,38.199-110.778,57.299
+        s-81.746,50.424-87.858,51.188C49.558,185.261,22.818,153.938,22.818,153.938z" />
+        <path d="M255.967,28.929c0,0-5.29-1.851-14.146,8.46
+        c-8.857,10.312,15.07,8.197,15.07,8.197L255.967,28.929z" />
+        <path d="M232.15,30.172c0,0,94.734,49.659,127.586,60.355
+        c32.851,10.696,113.832,46.603,116.889,55.771s-27.503,30.559-27.503,30.559s-23.685-21.391-54.243-34.379
+        c-30.56-12.987-83.274-34.379-112.306-48.131c-29.031-13.751-89.387-47.367-89.387-47.367L232.15,30.172z" />
+        <path class="subsvgder"
+          d="M255.834,29.408c0,0-2.292,92.442-4.584,97.026
+        c-2.293,4.584,42.783-12.987,43.546-18.335c0.765-5.349,6.877-50.423,2.293-55.007S260.417,27.116,255.834,29.408z" />
+      </g>
+      <!-- <path fill="#FFFFFF" stroke="#000000" stroke-width="2" d="M455.608,129.98l9.943,5.8
+        c0,0-25.464,29.92-30.98,30.557c-2.336-1.618-6.761-4.527-10.155-6.649L455.608,129.98z" /> -->
+    </symbol>
+  </svg>
+
+  <div id="arriba">
+    <div id="cinturones">
+      <div id="cinturonesTop">
+        <div style="width:9vw;">
+          <svg id="imgcinto" fill="#FFFFFF" style="width:9vw;height:100%">
+            <use href="#cinturonsvg"></use>
+          </svg>
+        </div>
+        <div id="cintosel" style="margin:0 20px;width:265px;"></div>
+
+        <div class="cinto" data-cinturon="segundo-dan">
+          <div class="name namedan">||</div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="tercer-dan">
+          <div class="name namedan">|||</div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="cuarto-dan">
+          <div class="name namedan">||||</div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="quinto-dan">
+          <div class="name namedan">|||||</div>
+          <div class="color"></div>
+        </div>
+      </div>
+      <div id="cinturonesBot">
+        <div class="cinto" data-cinturon="blanco-amarillo">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="amarillo">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="amarillo-naranja">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="naranja">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="naranja-verde">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="verde">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="verde-azul">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="azul">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="azul-rojo">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="rojo">
+          <div class="name"></div>
+          <div class="color"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="medio">
+    <div id="preguntas">
+      <div class="botones">
+        <span id="examen" class="btn">Examen Voz</span>
+        <span id="auto" class="btn">Todo Voz</span>
+        <span id="generar" class="btn">Mostrar todas</span>
+        <span id="reiniciar" class="btn reiniciar">Reiniciar</span>
+        <span id="mostrar" class="btn hidden">Imagen (WIP)</span>
+      </div>
+      <div class="botones">
+        <div class="btn son" data-tecnica="sogui">Sogui</div>
+        <div class="btn son" data-tecnica="maki">Maki</div>
+        <div class="btn son" data-tecnica="gongkiok">Gong&nbsp;Kiok</div>
+        <div class="btn pum" data-tecnica="pum">Pum</div>
+        <div class="btn bal" data-tecnica="chagui">Chagui</div>
+        <div class="btn bal" id="combinacion">Combo</div>
+      </div>
+      <div id="pregunta"></div>
+      <div id="imagen" class="hidden">
+        <img id="img"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=">
+      </div>
+    </div>
+  </div>
+
+  <div id="preguntadoHead">
+    <div>
+      <div>Sogui</div>
+      <div id="soguiCount"></div>
+    </div>
+    <div>
+      <div>Maki</div>
+      <div id="makiCount"></div>
+    </div>
+    <div>
+      <div>Gong Kiok</div>
+      <div id="gongkiokCount"></div>
+    </div>
+    <div>
+      <div>Pum</div>
+      <div id="pumCount"></div>
+    </div>
+    <div>
+      <div>Chagui</div>
+      <div id="chaguiCount"></div>
+    </div>
+  </div>
+  <div id="abajo" style="overflow-y: scroll;">
+    <div id="preguntado"></div>
+  </div>
+
+  <script>
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    var acumulativo = {
+      'blanco-amarillo': ['blanco-amarillo'],
+      'amarillo': ['blanco-amarillo', 'amarillo'],
+      'amarillo-naranja': ['blanco-amarillo', 'amarillo', 'amarillo-naranja'],
+      'naranja': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja'],
+      'naranja-verde': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde'],
+      'verde': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde'],
+      'verde-azul': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul'],
+      'azul': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul'],
+      'azul-rojo': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo'],
+      'rojo': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo'],
+      'segundo-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan'],
+      'tercer-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan'],
+      'cuarto-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan', 'cuarto-dan'],
+      'quinto-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan', 'cuarto-dan', 'quinto-dan'],
+    }
+    var colores = {
+      'blanco-amarillo': ['#FFFFFF', '#FBC02D'],
+      'amarillo': ['#FBC02D', '#FBC02D'],
+      'amarillo-naranja': ['#FBC02D', '#FB8C00'],
+      'naranja': ['#FB8C00', '#FB8C00'],
+      'naranja-verde': ['#FB8C00', '#43A047'],
+      'verde': ['#43A047', '#43A047'],
+      'verde-azul': ['#43A047', '#1565C0'],
+      'azul': ['#1565C0', '#1565C0'],
+      'azul-rojo': ['#1565C0', '#f44336'],
+      'rojo': ['#f44336', '#f44336'],
+      'segundo-dan': ['#000000', '#000000'],
+      'tercer-dan': ['#000000', '#000000'],
+      'cuarto-dan': ['#000000', '#000000'],
+      'quinto-dan': ['#000000', '#000000']
+    }
+
+    var sogui, maki, gongkiok, pum, chagui, todas;
+    var prepararTecnicas = (cinturon) => {
+      setCookie('cinturon', cinturon)
+      window['lastCinturon'] = cinturon;
+      document.querySelector('#imgcinto').setAttribute('fill', colores[cinturon][1]);
+      document.querySelector('.subsvgizq').setAttribute('fill', colores[cinturon][0]);
+      document.querySelector('.subsvgder').setAttribute('fill', colores[cinturon][0]);
+      document.querySelector('.subsvgstroke').setAttribute('stroke', "#000000");
+      if (cinturon.indexOf("dan") != -1) {
+        document.querySelector('.subsvgstroke').setAttribute('stroke', "gold");
+      }
+      document.querySelector('#cintosel').innerHTML = cinturon.replace("-", " ");
+      reset();
+      var acc = acumulativo[cinturon];
+      for (var i = 0; i < acc.length; i++) {
+        var color = acc[i];
+        sogui = sogui.concat(tecnicas[color]["sogui"]);
+        maki = maki.concat(tecnicas[color]["maki"]);
+        gongkiok = gongkiok.concat(tecnicas[color]["gongkiok"]);
+        pum = pum.concat(tecnicas[color]["pum"]);
+        chagui = chagui.concat(tecnicas[color]["chagui"]);
+
+      }
+      todas = todas.concat(sogui);
+      todas = todas.concat(maki);
+      todas = todas.concat(gongkiok);
+      todas = todas.concat(pum);
+      todas = todas.concat(chagui);
+      pintarPreguntado();
+    }
+
+    var preguntado = {
+      sogui: {},
+      maki: {},
+      gongkiok: {},
+      pum: {},
+      chagui: {}
+    };
+    var reset = () => {
+      imagenEl.classList.add('hidden');
+      todas = [];
+      sogui = [];
+      maki = [];
+      gongkiok = [];
+      pum = [];
+      chagui = [];
+
+      preguntado = {
+        sogui: {},
+        maki: {},
+        gongkiok: {},
+        pum: {},
+        chagui: {}
+      };
+      preguntaDiv.innerHTML = "";
+      preguntadoDiv.innerHTML = "";
+    }
+
+    var rng = (tecnica) => {
+      if (window[tecnica] != null) {
+        var arr = window[tecnica];
+        var idx = randomInt(0, arr.length - 1)
+
+        var pl = Object.keys(preguntado[tecnica]).length;
+        if (pl == arr.length) {
+          return tecnica + " completo";
+        } else {
+          if (preguntado[tecnica].hasOwnProperty(arr[idx])) {
+            return rng(tecnica);
+          } else {
+            preguntado[tecnica][arr[idx]] = true;
+            return arr[idx];
+          }
+        }
+      }
+      return "";
+    }
+
+
+    var setImage = (tecnica) => {
+      //WIP
+      var imgEl = document.querySelector("#img");
+      var imgName = tecnica.toLowerCase().replace(' ', '-');
+      imgEl.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mMsrwcAAXMA+FpHAHEAAAAASUVORK5CYII="
+    }
+
+    /* USE API TEST*/
+    var preguntaDiv = document.querySelector("#pregunta");
+    var preguntadoDiv = document.querySelector("#preguntado");
+    var cintoEls = document.querySelectorAll("[data-cinturon]");
+    var imagenEl = document.querySelector("#imagen");
+    var reiniciarEl = document.querySelector("#reiniciar");
+    for (var i = 0; i < cintoEls.length; i++) {
+      var cintoEl = cintoEls[i];
+      cintoEl.addEventListener('click', (e) => {
+        var el = e.currentTarget;
+        prepararTecnicas(el.dataset.cinturon);
+      });
+    }
+    var tecEls = document.querySelectorAll("[data-tecnica]");
+    for (var i = 0; i < tecEls.length; i++) {
+      var tecEl = tecEls[i];
+      tecEl.addEventListener('click', (e) => {
+        var el = e.currentTarget;
+        let rngTecnica = rng(el.dataset.tecnica);
+        preguntaDiv.innerHTML = rngTecnica
+        setImage(rngTecnica);
+        let audio = getAudio(rngTecnica)
+        if (audio != null) {
+          audio.play()
+        }
+        pintarPreguntado();
+      });
+    }
+
+    var generarBtn = document.querySelector("#generar");
+    var generar = (tecnica) => {
+      var notDone = true;
+      while (notDone) {
+        var nuevaTecnica = rng(tecnica);
+        preguntaDiv.innerHTML = nuevaTecnica;
+        pintarPreguntado();
+        if (nuevaTecnica.indexOf('completo') != -1) {
+          notDone = false;
+        }
+      }
+    }
+    generarBtn.addEventListener('click', (e) => {
+      prepararTecnicas(window['lastCinturon']);
+      generar('sogui');
+      generar('maki');
+      generar('gongkiok');
+      generar('pum');
+      generar('chagui');
+      preguntaDiv.innerHTML = 'Mostrando todas...';
+      imagenEl.classList.add('hidden');
+    });
+
+    var mostrarBtn = document.querySelector("#mostrar");
+    mostrarBtn.addEventListener('click', (e) => {
+      imagenEl.classList.toggle('hidden');
+    });
+
+    reiniciarEl.addEventListener('click', (e) => {
+      // prepararTecnicas(window['lastCinturon']);
+      location.reload()
+    });
+
+    var pintarPreguntado = () => {
+      var str = "";
+      for (var grupo in preguntado) {
+        let countEl = document.querySelector(`#${grupo}Count`)
+        countEl.innerHTML = `${Object.keys(preguntado[grupo]).length}/${window[grupo].length}`
+        str += '<div class="tit-historia">';
+        var tec = preguntado[grupo];
+        for (var tecnica in tec) {
+          str += "<div class='tec'>" + tecnica + "</div>";
+        }
+        str += "</div>";
+      }
+      preguntadoDiv.innerHTML = str;
+    }
+
+    if (getCookie('cinturon') == '') {
+      prepararTecnicas("rojo")
+    } else {
+      prepararTecnicas(getCookie('cinturon'))
+    }
+
+    function setCookie(cname, cvalue) {
+      var d = new Date()
+      d.setTime(d.getTime() + (3600 * 24 * 60 * 60 * 1000))
+      var expires = "expires=" + d.toUTCString()
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/"
+    }
+
+    function getCookie(cname) {
+      var name = cname + "="
+      var ca = document.cookie.split(';')
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i]
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1)
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length)
+        }
+      }
+      return ""
+    }
+
+    function getAudio(tecnica) {
+      if (tecnica.toLowerCase().indexOf('completo') == -1) {
+        return audioMap[tecnica]
+      }
+    }
+
+
+
+    var combinacionEl = document.querySelector("#combinacion");
+    combinacionEl.addEventListener('click', (e) => {
+      rngComboChagui()
+    })
+    var rngComboChagui = () => {
+      let comboLength = randomInt(3, 4)
+      let arr = window['chagui']
+      let chaguis = []
+      let idxmap = {}
+      while (chaguis.length != comboLength) {
+        var idx = randomInt(0, arr.length - 1)
+        if (idxmap[idx] == null) {
+          idxmap[idx] = true
+          chaguis.push(window['chagui'][idx])
+        }
+        if (chaguis.length == arr.length) {
+          break
+        }
+      }
+      let delays = [0]
+      for (let i = 0; i < chaguis.length; i++) {
+        let audio = getAudio(chaguis[i])
+        let prevDelay = delays[i]
+        delays.push(Math.ceil((audio.duration * 1000)) + prevDelay + 200)
+      }
+      for (let i = 0; i < chaguis.length; i++) {
+        let audio = getAudio(chaguis[i])
+        setTimeout(() => {
+          audio.play()
+        }, delays[i])
+      }
+      preguntaDiv.innerHTML = chaguis.join(', ');
+      return delays[delays.length - 1] + 2000
+    }
+
+
+    var examen = document.querySelector("#examen");
+    examen.addEventListener('click', (e) => {
+      examenAleatorio()
+    });
+    function examenAleatorio() {
+      let TIME = 10000
+      let mostrar = (tec, time) => {
+        setTimeout(() => {
+          let audio = getAudio(tec)
+          if (audio) {
+            preguntaDiv.innerHTML = tec
+            setImage(tec)
+            pintarPreguntado()
+            audio.play()
+          }
+        }, time)
+      }
+      let auxtec = []
+      for (let i = 0; i < 3; i++) {
+        let tecnica = rng('sogui')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      for (let i = 0; i < 3; i++) {
+        let tecnica = rng('maki')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      for (let i = 0; i < 3; i++) {
+        let tecnica = rng('gongkiok')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      for (let i = 0; i < 3; i++) {
+        let tecnica = rng('pum')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      for (let i = 0; i < 3; i++) {
+        let tecnica = rng('chagui')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+
+      let delays = [0]
+      for (let i = 0; i < auxtec.length; i++) {
+        let audio = getAudio(auxtec[i])
+        let prevDelay = delays[i]
+        delays.push(Math.ceil((audio.duration * 1000)) + prevDelay + TIME)
+      }
+      for (let i = 0; i < auxtec.length; i++) {
+        mostrar(auxtec[i], delays[i])
+      }
+
+
+      let lastDelay = delays[delays.length - 1] + 10000
+      setTimeout(() => {
+        rngComboChagui()
+      }, lastDelay)
+    }
+
+    var auto = document.querySelector("#auto");
+    auto.addEventListener('click', (e) => {
+      todoAuto()
+    });
+    function todoAuto() {
+      let TIME = 10000
+      let mostrar = (tec, time) => {
+        setTimeout(() => {
+          let audio = getAudio(tec)
+          if (audio) {
+            preguntaDiv.innerHTML = tec
+            setImage(tec)
+            pintarPreguntado()
+            audio.play()
+          }
+        }, time)
+      }
+      auxtec = []
+      var tecnica = ""
+      var i = 0
+      while (tecnica.toLowerCase().indexOf('completo') == -1) {
+        tecnica = rng('sogui')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      var tecnica = ""
+      while (tecnica.toLowerCase().indexOf('completo') == -1) {
+        tecnica = rng('maki')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      var tecnica = ""
+      while (tecnica.toLowerCase().indexOf('completo') == -1) {
+        tecnica = rng('gongkiok')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      var tecnica = ""
+      while (tecnica.toLowerCase().indexOf('completo') == -1) {
+        tecnica = rng('pum')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      var tecnica = ""
+      while (tecnica.toLowerCase().indexOf('completo') == -1) {
+        tecnica = rng('chagui')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          auxtec.push(tecnica)
+        }
+      }
+      let delays = [0]
+      for (let i = 0; i < auxtec.length; i++) {
+        let audio = getAudio(auxtec[i])
+        let prevDelay = delays[i]
+        delays.push(Math.ceil((audio.duration * 1000)) + prevDelay + TIME)
+      }
+      for (let i = 0; i < auxtec.length; i++) {
+        mostrar(auxtec[i], delays[i])
+      }
+    }
+  </script>
+</body>
+
+</html>
