@@ -121,9 +121,18 @@ html,
     .btn.bal {
       background-color: #4d0b0b;
     }
+    .btn.com {
+      background-color: #451119;
+    }
 
-    .btn.son {
+    .btn.sog {
       background-color: rgb(6, 41, 94);
+    }
+    .btn.mak {
+      background-color: #311B92;
+    }
+    .btn.gon {
+      background-color: #4A148C;
     }
 
     .btn.pum {
@@ -131,7 +140,7 @@ html,
     }
 
     .btn.reiniciar {
-      background-color: #004042;
+      background-color: #006064;
     }
 
     .btn:active,
@@ -143,10 +152,22 @@ html,
     .btn.bal:active {
       background-color: #860000;
     }
+    .btn.com:hover,
+    .btn.com:active {
+      background-color: #591620;
+    }
 
-    .btn.son:hover,
-    .btn.son:active {
+    .btn.sog:hover,
+    .btn.sog:active {
       background-color: rgb(0, 56, 141);
+    }
+    .btn.mak:hover,
+    .btn.mak:active {
+      background-color: #4527A0;
+    }
+    .btn.gon:hover,
+    .btn.gon:active {
+      background-color: #6A1B9A;
     }
 
     .btn.pum:hover,
@@ -156,7 +177,7 @@ html,
 
     .btn.reiniciar:hover,
     .btn.reiniciar:active {
-      background-color: #006c70;
+      background-color: #00838F;
     }
 
 
@@ -216,26 +237,6 @@ html,
       height: 100%;
     }
 
-    #preguntado {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: stretch;
-      height: 100%;
-      font-size:18px;
-    }
-
-
-    #preguntadoHead>div {
-      flex: 1;
-      border-left: 1px solid #14171a;
-      padding-top: 2px;
-    }
-
-    #preguntadoHead div {
-      text-align: center;
-    }
-
     [data-cinturon=blanco-amarillo]>.color {
       border-top-color: #FFFFFF;
       border-bottom-color: #FBC02D;
@@ -278,12 +279,12 @@ html,
 
     [data-cinturon=azul-rojo]>.color {
       border-top-color: #1565C0;
-      border-bottom-color: #f44336;
+      border-bottom-color: #ff0000;
     }
 
     [data-cinturon=rojo]>.color {
-      border-top-color: #f44336;
-      border-bottom-color: #f44336;
+      border-top-color: #ff0000;
+      border-bottom-color: #ff0000;
     }
 
     [data-cinturon=segundo-dan]>.color {
@@ -305,6 +306,26 @@ html,
       border-top-color: #000000;
       border-bottom-color: #000000;
     }
+
+    #preguntado {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+        height: 100%;
+        font-size:26px;
+      }
+  
+  
+      #preguntadoHead>div {
+        flex: 1;
+        border-left: 1px solid #14171a;
+        padding-top: 2px;
+      }
+  
+      #preguntadoHead div {
+        text-align: center;
+      }
 
     .tit-historia {
       flex-grow: 1;
@@ -328,12 +349,23 @@ html,
     }
 
     .tit-historia>.tec {
-      padding: 0px 3px;
+      padding: 4px;
+      margin-bottom:3px;
+      
+    }
+    .tit-historia>.tec:nth-child(even){
+        background-color:rgba(255, 255, 255, 0.05);
+        color:#B3E5FC;
+    }
+    .tit-historia>.tec:nth-child(odd){
+        background-color:rgba(255, 255, 255, 0.1);
+        color:#C8E6C9;
     }
 
     .tit-historia>.tec::before {
       counter-increment: section;
       content: counter(section) ". ";
+      color: #fccab3;
     }
 
     #cintosel {
