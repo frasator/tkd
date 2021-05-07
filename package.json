@@ -1,0 +1,23 @@
+{
+  "name": "tkd",
+  "version": "1.0.0",
+  "description": "https://frasator.github.io/tkd/",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ws"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frasator/tkd.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frasator/tkd/issues"
+  },
+  "homepage": "https://github.com/frasator/tkd#readme",
+  "devDependencies": {
+    "local-web-server": "^4.2.1"
+  }
+}
