@@ -1,4 +1,4 @@
-<html>
+<!DOCTYPE html>
 
 <head>
   <title>Examen Taekwondo España</title>
@@ -160,7 +160,7 @@
       <div style="display:flex;align-items: stretch;">
         <div id="pregunta" style="flex-grow:1;height:300px"></div>
         <div id="imagen">
-          <img id="img">
+          <img id="img" onerror="this.classList.add('error')" onload="this.classList.remove('error')">
         </div>
       </div>
     </div>
@@ -313,23 +313,23 @@
     })
     var setImage = (tecnica) => {
       var imgEl = document.querySelector("#img");
-      var imgName = tecnica.replace(' ', '-')
-      imgEl.setAttribute('src', `./images/${imgName}.png`)
+      var imgName = tecnica.replace(/ /g, '-')
+      const imageURL = `./images/${imgName}.png`
+      imgEl.setAttribute('src', imageURL)
+      imgEl.setAttribute('alt', `${tecnica}`)
     }
     var toggleImage = (bool) => {
-      if (igm.complete) {
-        if (igm.naturalWidth > 0 && igm.naturalHeight > 0) {
-          if (bool == false) {
-            imagenEl.classList.add('hidden')
-          } else if (bool == true) {
-            imagenEl.classList.remove('hidden')
-          } else {
-            imagenEl.classList.toggle('hidden')
-          }
-        } else {
+      // if (igm.naturalWidth > 0 && igm.naturalHeight > 0) {
+        if (bool == false) {
           imagenEl.classList.add('hidden')
+        } else if (bool == true) {
+          imagenEl.classList.remove('hidden')
+        } else {
+          imagenEl.classList.toggle('hidden')
         }
-      }
+      // } else {
+        // imagenEl.classList.add('hidden')
+      // }
     }
 
     /* USE API TEST*/
@@ -407,7 +407,15 @@
         }
         str += "</div>";
       }
-      preguntadoDiv.innerHTML = str;
+      preguntadoDiv.innerHTML = str
+      preguntadoDiv.querySelectorAll('.tec').forEach(tecEl => {
+        tecEl.addEventListener('click', async (e) => {
+          const tecnica = e.target.innerText.trim()
+          preguntaDiv.innerHTML = tecnica
+          setImage(tecnica)
+          toggleImage(true)
+        })
+      })
     }
 
     if (getCookie('cinturon') == '') {
