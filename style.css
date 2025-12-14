@@ -236,7 +236,7 @@ body {
   position: fixed;
   z-index: 99999;
   box-sizing: border-box;
-  height: 100vh;
+  height: 95vh;
   width: 100vw;
   padding: 4px;
   top: 0;
