@@ -71,19 +71,27 @@
         </div>
         <div id="cintosel" style="margin:0 20px;width:265px;"></div>
         <div class="cinto" data-cinturon="segundo-dan">
-          <div class="name namedan"><div>II</div></div>
+          <div class="name namedan">
+            <div>II</div>
+          </div>
           <div class="color"></div>
         </div>
         <div class="cinto" data-cinturon="tercer-dan">
-          <div class="name namedan"><div>III</div></div>
+          <div class="name namedan">
+            <div>III</div>
+          </div>
           <div class="color"></div>
         </div>
         <div class="cinto" data-cinturon="cuarto-dan">
-          <div class="name namedan"><div>IV</div></div>
+          <div class="name namedan">
+            <div>IV</div>
+          </div>
           <div class="color"></div>
         </div>
         <div class="cinto" data-cinturon="quinto-dan">
-          <div class="name namedan"><div>V</div></div>
+          <div class="name namedan">
+            <div>V</div>
+          </div>
           <div class="color"></div>
         </div>
       </div>
@@ -138,8 +146,8 @@
         <span id="examen" class="btn">Examen Voz</span>
         <span id="auto" class="btn">Todo Voz</span>
         <span id="generar" class="btn">Mostrar todas</span>
+        <span id="mostrar" class="btn">Imagen</span>
         <span id="reiniciar" class="btn reiniciar">Reiniciar</span>
-        <span id="mostrar" class="btn hidden">Imagen (WIP)</span>
       </div>
       <div class="botones">
         <div class="btn sog" data-tecnica="sogui">Sogui</div>
@@ -149,10 +157,11 @@
         <div class="btn bal" data-tecnica="chagui">Chagui</div>
         <div class="btn com" id="combinacion">Combo</div>
       </div>
-      <div id="pregunta" style="overflow-y: auto;height:300px"></div>
-      <div id="imagen" class="hidden">
-        <img id="img"
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=">
+      <div style="display:flex;align-items: stretch;">
+        <div id="pregunta" style="flex-grow:1;height:300px"></div>
+        <div id="imagen">
+          <img id="img">
+        </div>
       </div>
     </div>
   </div>
@@ -259,7 +268,7 @@
       chagui: {}
     };
     var reset = () => {
-      imagenEl.classList.add('hidden');
+      toggleImage(false)
       todas = [];
       sogui = [];
       maki = [];
@@ -298,12 +307,29 @@
       return "";
     }
 
-
+    var igm = document.querySelector("#img")
+    igm.addEventListener('click', (e) => {
+      toggleImage(false)
+    })
     var setImage = (tecnica) => {
-      //WIP
       var imgEl = document.querySelector("#img");
-      var imgName = tecnica.toLowerCase().replace(' ', '-');
-      imgEl.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mMsrwcAAXMA+FpHAHEAAAAASUVORK5CYII="
+      var imgName = tecnica.replace(' ', '-')
+      imgEl.setAttribute('src', `./images/${imgName}.png`)
+    }
+    var toggleImage = (bool) => {
+      if (igm.complete) {
+        if (igm.naturalWidth > 0 && igm.naturalHeight > 0) {
+          if (bool == false) {
+            imagenEl.classList.add('hidden')
+          } else if (bool == true) {
+            imagenEl.classList.remove('hidden')
+          } else {
+            imagenEl.classList.toggle('hidden')
+          }
+        } else {
+          imagenEl.classList.add('hidden')
+        }
+      }
     }
 
     /* USE API TEST*/
@@ -319,19 +345,19 @@
         prepararTecnicas(el.dataset.cinturon);
       });
     }
-    var tecEls = document.querySelectorAll("[data-tecnica]");
+    var tecEls = document.querySelectorAll("[data-tecnica]")
     for (var i = 0; i < tecEls.length; i++) {
       var tecEl = tecEls[i];
       tecEl.addEventListener('click', (e) => {
         var el = e.currentTarget;
-        let rngTecnica = rng(el.dataset.tecnica);
+        let rngTecnica = rng(el.dataset.tecnica)
         preguntaDiv.innerHTML = rngTecnica
-        setImage(rngTecnica);
+        setImage(rngTecnica)
         let audio = getAudio(rngTecnica)
         if (audio != null) {
           audio.play()
         }
-        pintarPreguntado();
+        pintarPreguntado()
       });
     }
 
@@ -340,27 +366,28 @@
       var notDone = true;
       while (notDone) {
         var nuevaTecnica = rng(tecnica);
-        preguntaDiv.innerHTML = nuevaTecnica;
-        pintarPreguntado();
+        preguntaDiv.innerHTML = nuevaTecnica
+        setImage(nuevaTecnica)
+        pintarPreguntado()
         if (nuevaTecnica.indexOf('completo') != -1) {
           notDone = false;
         }
       }
     }
     generarBtn.addEventListener('click', (e) => {
-      prepararTecnicas(window['lastCinturon']);
-      generar('sogui');
-      generar('maki');
-      generar('gongkiok');
-      generar('pum');
-      generar('chagui');
-      preguntaDiv.innerHTML = 'Mostrando todas...';
-      imagenEl.classList.add('hidden');
-    });
+      prepararTecnicas(window['lastCinturon'])
+      generar('sogui')
+      generar('maki')
+      generar('gongkiok')
+      generar('pum')
+      generar('chagui')
+      preguntaDiv.innerHTML = 'Mostrando todas...'
+      toggleImage(false)
+    })
 
     var mostrarBtn = document.querySelector("#mostrar");
     mostrarBtn.addEventListener('click', (e) => {
-      imagenEl.classList.toggle('hidden');
+      toggleImage()
     });
 
     reiniciarEl.addEventListener('click', (e) => {
