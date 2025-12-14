@@ -364,7 +364,7 @@ body {
 .tit-historia>.tec {
   padding: 4px;
   margin-bottom: 3px;
-
+  user-select: text;
 }
 
 .tit-historia>.tec:nth-child(even) {
