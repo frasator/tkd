@@ -248,7 +248,7 @@ body {
   width: auto;
   height: 100%;
   pointer-events: auto;
-  
+
   background-color: #000000;
   text-align: center;
   display: flex;
@@ -257,6 +257,7 @@ body {
 }
 
 #imagen>img.error {
+  min-width: 50%;
 }
 
 [data-cinturon=blanco-amarillo]>.color {
