@@ -159,7 +159,7 @@
       </div>
       <div style="display:flex;align-items: stretch;">
         <div id="pregunta" style="flex-grow:1;height:300px"></div>
-        <div id="imagen">
+        <div id="imagen" class="hidden">
           <img id="img" onerror="this.classList.add('error')" onload="this.classList.remove('error')">
         </div>
       </div>
@@ -307,36 +307,48 @@
       return "";
     }
 
-    var igm = document.querySelector("#img")
-    igm.addEventListener('click', (e) => {
-      toggleImage(false)
+    var imagenEl = document.querySelector("#imagen")
+    var img = document.querySelector("#img")
+    img.addEventListener('click', (e) => {
+      clearImage()
     })
+    var clearImage = (tecnica) => {
+      img.setAttribute('src', '')
+      img.setAttribute('alt', '')
+      imagenEl.classList.add('hidden')
+    }
     var setImage = (tecnica) => {
-      var imgEl = document.querySelector("#img");
-      var imgName = tecnica.replace(/ /g, '-')
-      const imageURL = `./images/${imgName}.png`
-      imgEl.setAttribute('src', imageURL)
-      imgEl.setAttribute('alt', `\n\n${tecnica}`)
+      if (tecnica != '' && !/completo/gi.test(tecnica) && !/todas/gi.test(tecnica)) {
+        var imgName = tecnica.replace(/ /g, '-')
+        const imageURL = `./images/${imgName}.png`
+        img.setAttribute('src', imageURL)
+        img.setAttribute('alt', `${tecnica}`)
+      }
     }
     var toggleImage = (bool) => {
-      // if (igm.naturalWidth > 0 && igm.naturalHeight > 0) {
+      const tecnica = preguntaDiv.innerText.trim()
+      if (tecnica != '' && !/completo/gi.test(tecnica) && !/todas/gi.test(tecnica)) {
+        setImage(tecnica)
         if (bool == false) {
-          imagenEl.classList.add('hidden')
+          clearImage()
         } else if (bool == true) {
           imagenEl.classList.remove('hidden')
         } else {
           imagenEl.classList.toggle('hidden')
         }
-      // } else {
-        // imagenEl.classList.add('hidden')
-      // }
+      } else {
+        clearImage()
+      }
     }
+    var mostrarBtn = document.querySelector("#mostrar")
+    mostrarBtn.addEventListener('click', (e) => {
+      toggleImage()
+    });
 
     /* USE API TEST*/
     var preguntaDiv = document.querySelector("#pregunta");
     var preguntadoDiv = document.querySelector("#preguntado");
     var cintoEls = document.querySelectorAll("[data-cinturon]");
-    var imagenEl = document.querySelector("#imagen");
     var reiniciarEl = document.querySelector("#reiniciar");
     for (var i = 0; i < cintoEls.length; i++) {
       var cintoEl = cintoEls[i];
@@ -352,6 +364,7 @@
         var el = e.currentTarget;
         let rngTecnica = rng(el.dataset.tecnica)
         preguntaDiv.innerHTML = rngTecnica
+        clearImage()
         setImage(rngTecnica)
         let audio = getAudio(rngTecnica)
         if (audio != null) {
@@ -385,10 +398,6 @@
       toggleImage(false)
     })
 
-    var mostrarBtn = document.querySelector("#mostrar");
-    mostrarBtn.addEventListener('click', (e) => {
-      toggleImage()
-    });
 
     reiniciarEl.addEventListener('click', (e) => {
       // prepararTecnicas(window['lastCinturon']);
