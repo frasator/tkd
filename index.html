@@ -159,7 +159,7 @@
       </div>
       <div style="display:flex;align-items: stretch;">
         <div id="pregunta" style="flex-grow:1;height:300px"></div>
-        <div id="imagen" class="hidden">
+        <div id="imagen">
           <img id="img" onerror="this.classList.add('error')" onload="this.classList.remove('error')">
         </div>
       </div>
@@ -315,7 +315,6 @@
     var clearImage = (tecnica) => {
       img.setAttribute('src', '')
       img.setAttribute('alt', '')
-      imagenEl.classList.add('hidden')
     }
     var setImage = (tecnica) => {
       if (tecnica != '' && !/completo/gi.test(tecnica) && !/todas/gi.test(tecnica)) {
@@ -331,10 +330,6 @@
         setImage(tecnica)
         if (bool == false) {
           clearImage()
-        } else if (bool == true) {
-          imagenEl.classList.remove('hidden')
-        } else {
-          imagenEl.classList.toggle('hidden')
         }
       } else {
         clearImage()
