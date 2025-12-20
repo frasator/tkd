@@ -360,7 +360,6 @@
         let rngTecnica = rng(el.dataset.tecnica)
         preguntaDiv.innerHTML = rngTecnica
         clearImage()
-        setImage(rngTecnica)
         let audio = getAudio(rngTecnica)
         if (audio != null) {
           audio.play()
