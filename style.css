@@ -252,11 +252,16 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: transparent;
 }
 
-#imagen>img.error {
+#imagen>img.error,
+#imagen>img.none {
+  visibility: hidden;
+  opacity: 0;
   display: none;
   pointer-events: none;
+  background-color: transparent;
 }
 
 [data-cinturon=blanco-amarillo]>.color {

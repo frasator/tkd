@@ -313,8 +313,9 @@
       clearImage()
     })
     var clearImage = (tecnica) => {
-      img.setAttribute('src', '')
+      img.setAttribute('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')
       img.setAttribute('alt', '')
+      img.classList.add('none')
     }
     var setImage = (tecnica) => {
       if (tecnica != '' && !/completo/gi.test(tecnica) && !/todas/gi.test(tecnica)) {
@@ -322,6 +323,7 @@
         const imageURL = `./images/${imgName}.png`
         img.setAttribute('src', imageURL)
         img.setAttribute('alt', `${tecnica}`)
+        img.classList.remove('none')
       }
     }
     var toggleImage = (bool) => {
@@ -338,7 +340,7 @@
     var mostrarBtn = document.querySelector("#mostrar")
     mostrarBtn.addEventListener('click', (e) => {
       toggleImage()
-    });
+    })
 
     /* USE API TEST*/
     var preguntaDiv = document.querySelector("#pregunta");
