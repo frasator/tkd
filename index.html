@@ -374,7 +374,7 @@
       while (notDone) {
         var nuevaTecnica = rng(tecnica);
         preguntaDiv.innerHTML = nuevaTecnica
-        setImage(nuevaTecnica)
+        clearImage()
         pintarPreguntado()
         if (nuevaTecnica.indexOf('completo') != -1) {
           notDone = false;
@@ -502,7 +502,7 @@
           let audio = getAudio(tec)
           if (audio) {
             preguntaDiv.innerHTML = tec
-            setImage(tec)
+            clearImage()
             pintarPreguntado()
             audio.play()
           }
@@ -573,7 +573,7 @@
           let audio = getAudio(tec)
           if (audio) {
             preguntaDiv.innerHTML = tec
-            setImage(tec)
+            clearImage()
             pintarPreguntado()
             audio.play()
           }
