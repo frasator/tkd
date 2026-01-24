@@ -190,6 +190,14 @@ body {
   background-color: #00838F;
 }
 
+.btn.time{
+  flex-grow: initial;
+  background-color: #002a45;
+}
+.btn.time:hover,
+.btn.time:active {
+  background-color: #0060a0;
+}
 
 #cinturones {
   height: 100%;

@@ -147,6 +147,7 @@
         <span id="auto" class="btn">Todo Voz</span>
         <span id="generar" class="btn">Mostrar todas</span>
         <span id="mostrar" class="btn">Imagen</span>
+        <div id="timeBtn" class="btn time">&#128343;</div>
         <span id="reiniciar" class="btn reiniciar">Reiniciar</span>
       </div>
       <div class="botones">
@@ -193,6 +194,22 @@
   </div>
 
   <script>
+    let savedTIME = parseInt(localStorage.getItem('TIME'))
+    window.TIME = isNaN(savedTIME) ? 10000 : savedTIME
+    var timeBtn = document.querySelector("#timeBtn")
+    timeBtn.addEventListener('click', (e) => {
+      let resultado = window.prompt("Intervalo de tiempo entre técnicas (segundos)", window.TIME / 1000)
+      if (resultado != null) {
+        const parsedTIME = parseFloat(resultado)
+        if (!isNaN(parsedTIME)) {
+          window.TIME = parsedTIME * 1000
+          localStorage.setItem('TIME', window.TIME)
+          location.reload()
+        }
+      }
+    })
+
+
     function randomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1) + min);
     }
@@ -283,8 +300,8 @@
         pum: {},
         chagui: {}
       };
-      preguntaDiv.innerHTML = "";
-      preguntadoDiv.innerHTML = "";
+      preguntaDiv.innerHTML = ""
+      preguntadoDiv.innerHTML = ""
     }
 
     var rng = (tecnica) => {
@@ -304,7 +321,7 @@
           }
         }
       }
-      return "";
+      return ""
     }
 
     var imagenEl = document.querySelector("#imagen")
@@ -494,21 +511,20 @@
 
 
     var examen = document.querySelector("#examen");
-    examen.addEventListener('click', (e) => {
-      examenAleatorio()
+    examen.addEventListener('click', async (e) => {
+      await examenAleatorio()
     });
-    function examenAleatorio() {
-      let TIME = 10000
-      let mostrar = (tec, time) => {
-        setTimeout(() => {
-          let audio = getAudio(tec)
-          if (audio) {
-            preguntaDiv.innerHTML = tec
-            clearImage()
-            pintarPreguntado()
-            audio.play()
-          }
-        }, time)
+    async function examenAleatorio() {
+      let mostrar = async (tec) => {
+        let audio = getAudio(tec)
+        if (audio) {
+          preguntaDiv.innerHTML = tec
+          clearImage()
+          pintarPreguntado()
+          audio.play()
+          const durationMS = Math.ceil(audio.duration * 1000)
+          await new Promise(resolve => setTimeout(resolve, durationMS))
+        }
       }
       let auxtec = []
       let numeroSoguis = getNumeroPreguntasPorTecnica('sogui')
@@ -547,39 +563,28 @@
         }
       }
 
-      let delays = [0]
       for (let i = 0; i < auxtec.length; i++) {
-        let audio = getAudio(auxtec[i])
-        let prevDelay = delays[i]
-        delays.push(Math.ceil((audio.duration * 1000)) + prevDelay + TIME)
+        await mostrar(auxtec[i])
+        await new Promise(resolve => setTimeout(resolve, window.TIME))
       }
-      for (let i = 0; i < auxtec.length; i++) {
-        mostrar(auxtec[i], delays[i])
-      }
-
-
-      let lastDelay = delays[delays.length - 1] + 10000
-      setTimeout(() => {
-        rngComboChagui()
-      }, lastDelay)
+      rngComboChagui()
     }
 
     var auto = document.querySelector("#auto");
-    auto.addEventListener('click', (e) => {
-      todoAuto()
-    });
-    function todoAuto() {
-      let TIME = 10000
-      let mostrar = (tec, time) => {
-        setTimeout(() => {
-          let audio = getAudio(tec)
-          if (audio) {
-            preguntaDiv.innerHTML = tec
-            clearImage()
-            pintarPreguntado()
-            audio.play()
-          }
-        }, time)
+    auto.addEventListener('click', async (e) => {
+      await todoAuto()
+    })
+    async function todoAuto() {
+      let mostrar = async (tec) => {
+        let audio = getAudio(tec)
+        if (audio) {
+          preguntaDiv.innerHTML = tec
+          clearImage()
+          pintarPreguntado()
+          audio.play()
+          const durationMS = Math.ceil(audio.duration * 1000)
+          await new Promise(resolve => setTimeout(resolve, durationMS))
+        }
       }
       auxtec = []
       var tecnica = ""
@@ -618,14 +623,9 @@
           auxtec.push(tecnica)
         }
       }
-      let delays = [0]
       for (let i = 0; i < auxtec.length; i++) {
-        let audio = getAudio(auxtec[i])
-        let prevDelay = delays[i]
-        delays.push(Math.ceil((audio.duration * 1000)) + prevDelay + TIME)
-      }
-      for (let i = 0; i < auxtec.length; i++) {
-        mostrar(auxtec[i], delays[i])
+        await mostrar(auxtec[i])
+        await new Promise(resolve => setTimeout(resolve, window.TIME))
       }
     }
 
