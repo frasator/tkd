@@ -518,6 +518,11 @@
       let mostrar = async (tec) => {
         let audio = getAudio(tec)
         if (audio) {
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+          if (audioCtx.state === 'suspended') {
+            await audioCtx.resume()
+          }
+          //
           preguntaDiv.innerHTML = tec
           clearImage()
           pintarPreguntado()
@@ -578,6 +583,11 @@
       let mostrar = async (tec) => {
         let audio = getAudio(tec)
         if (audio) {
+          const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+          if (audioCtx.state === 'suspended') {
+            await audioCtx.resume()
+          }
+          //
           preguntaDiv.innerHTML = tec
           clearImage()
           pintarPreguntado()
