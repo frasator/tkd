@@ -3,6 +3,8 @@
 <head>
   <title>Examen Taekwondo España</title>
   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥋</text></svg>">
   <link rel="stylesheet" href="style.css">
   <script src="tecnicas.js"></script>
 
@@ -41,6 +43,10 @@
         console.log(`${aux}.mp3`)
       }
     })
+    var silencioAudio = new Audio(`sound/silencio.mp3`)
+    silencioAudio.onloadedmetadata = () => {
+      audioMap['silencio'] = silencioAudio
+    }
   </script>
 </head>
 
@@ -156,12 +162,12 @@
   <div id="medio">
     <div id="preguntas">
       <div class="botones">
-        <span id="examen" class="btn">🎲 Examen Voz</span>
-        <span id="auto" class="btn">🎲 Todo Voz</span>
-        <span id="generar" class="btn">🎲 Mostrar todo</span>
-        <span id="mostrar" class="btn">Imagen</span>
+        <span id="examen" class="btn">⚡🎓🎲🔊</span>
+        <span id="auto" class="btn">🎓🎲🔊</span>
+        <span id="generar" class="btn">📖🎲</span>
+        <span id="mostrar" class="btn">🖼️</span>
         <div id="timeBtn" class="btn time">&#128343;</div>
-        <span id="reiniciar" class="btn reiniciar">Reiniciar</span>
+        <span id="reiniciar" class="btn reiniciar">↻</span>
       </div>
       <div class="botones">
         <div class="btn sog" data-tecnica="sogui">Sogui</div>
@@ -397,7 +403,7 @@
           audio.play()
         }
         pintarPreguntado()
-      });
+      })
     }
 
     var generarBtn = document.querySelector("#generar");
@@ -516,11 +522,23 @@
       preguntaDiv.innerHTML = chaguis.join(', ');
     }
 
+    async function prepararFuente(audioCtx, url) {
+      // 1. Obtener los datos del archivo
+      const res = await fetch(url)
+      const arrayBuffer = await res.arrayBuffer()
+
+      // 2. Decodificar el audio a un buffer que el navegador entienda
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer)
+
+      // 3. Crear la fuente y conectarla a los altavoces
+      const fuente = audioCtx.createBufferSource()
+      fuente.buffer = audioBuffer
+      fuente.connect(audioCtx.destination)
+      return { fuente, audioBuffer }
+    }
 
     var examen = document.querySelector("#examen");
-    examen.addEventListener('click', async (e) => {
-      await examenAleatorio()
-    });
+    examen.addEventListener('click', examenAleatorio)
     async function examenAleatorio() {
       let auxtec = []
       let numeroSoguis = getNumeroPreguntasPorTecnica('sogui')
@@ -559,13 +577,18 @@
         }
       }
 
-      // Inicializar contexto en el primer tap
+      // Para que reproduzca un audio y se active, es como si pulsamos en una tecnica suelta
+      let audio = getAudio('silencio')
+      audio.play()
 
+      // Inicializar contexto en el primer tap
       let audioCtx
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)()
       }
-      if (audioCtx.state === 'suspended') await audioCtx.resume()
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume()
+      }
 
       // El punto de partida es el reloj interno del hardware
       let tiempoDeInicio = audioCtx.currentTime + 0.1; // Pequeño margen de seguridad
@@ -573,51 +596,29 @@
       for (let i = 0; i < auxtec.length; i++) {
         const tec = auxtec[i]
         let audio = getAudio(tec)
+        let silencio = getAudio('silencio')
         if (audio) {
-          const res = await fetch(audio.src) // `sound/${tec}.mp3`
-          const arrayBuffer = await res.arrayBuffer()
-          const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer)
+          const r = await prepararFuente(audioCtx, audio.src)
+          const rs = await prepararFuente(audioCtx, silencio.src)
 
-          const fuente = audioCtx.createBufferSource()
-          fuente.buffer = audioBuffer
-          fuente.connect(audioCtx.destination)
-
-          fuente.onended = () => {
+          rs.fuente.onended = () => {
+            preguntaDiv.innerHTML = tec
+            clearImage()
+            pintarPreguntado()
           }
           // Programamos el sonido en su momento exacto
-          fuente.start(tiempoDeInicio);
+          rs.fuente.start(tiempoDeInicio)
+          r.fuente.start(tiempoDeInicio)
 
           // El siguiente sonido empezará cuando acabe este + el intervalo
-          tiempoDeInicio += audioBuffer.duration + (window.TIME / 1000);
-          //////////////////
-          preguntaDiv.innerHTML = tec
-          clearImage()
-          pintarPreguntado()
-          // audio.play()
-          const durationMS = Math.ceil(audio.duration * 1000)
-          await sleepRAF(durationMS)
+          tiempoDeInicio += r.audioBuffer.duration + (window.TIME / 1000);
         }
-        await sleepRAF(window.TIME)
       }
-      // await rngComboChagui()
     }
 
     var auto = document.querySelector("#auto");
-    auto.addEventListener('click', async (e) => {
-      await todoAuto()
-    })
+    auto.addEventListener('click', todoAuto)
     async function todoAuto() {
-      let mostrar = async (tec) => {
-        let audio = getAudio(tec)
-        if (audio) {
-          preguntaDiv.innerHTML = tec
-          clearImage()
-          pintarPreguntado()
-          audio.play()
-          const durationMS = Math.ceil(audio.duration * 1000)
-          await sleepRAF(durationMS)
-        }
-      }
       auxtec = []
       var tecnica = ""
       var i = 0
@@ -655,9 +656,43 @@
           auxtec.push(tecnica)
         }
       }
+
+      // Para que reproduzca un audio y se active, es como si pulsamos en una tecnica suelta
+      let audio = getAudio('silencio')
+      audio.play()
+
+      // Inicializar contexto en el primer tap
+      let audioCtx
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+      }
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume()
+      }
+
+      // El punto de partida es el reloj interno del hardware
+      let tiempoDeInicio = audioCtx.currentTime + 0.1; // Pequeño margen de seguridad
+
       for (let i = 0; i < auxtec.length; i++) {
-        await mostrar(auxtec[i])
-        await sleepRAF(window.TIME)
+        const tec = auxtec[i]
+        let audio = getAudio(tec)
+        let silencio = getAudio('silencio')
+        if (audio) {
+          const r = await prepararFuente(audioCtx, audio.src)
+          const rs = await prepararFuente(audioCtx, silencio.src)
+
+          rs.fuente.onended = () => {
+            preguntaDiv.innerHTML = tec
+            clearImage()
+            pintarPreguntado()
+          }
+          // Programamos el sonido en su momento exacto
+          rs.fuente.start(tiempoDeInicio)
+          r.fuente.start(tiempoDeInicio)
+
+          // El siguiente sonido empezará cuando acabe este + el intervalo
+          tiempoDeInicio += r.audioBuffer.duration + (window.TIME / 1000);
+        }
       }
     }
 
