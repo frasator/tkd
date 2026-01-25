@@ -522,17 +522,6 @@
       await examenAleatorio()
     });
     async function examenAleatorio() {
-      let mostrar = async (tec) => {
-        let audio = getAudio(tec)
-        if (audio) {
-          preguntaDiv.innerHTML = tec
-          clearImage()
-          pintarPreguntado()
-          audio.play()
-          const durationMS = Math.ceil(audio.duration * 1000)
-          await sleepRAF(durationMS)
-        }
-      }
       let auxtec = []
       let numeroSoguis = getNumeroPreguntasPorTecnica('sogui')
       for (let i = 0; i < numeroSoguis; i++) {
@@ -570,11 +559,47 @@
         }
       }
 
+      // Inicializar contexto en el primer tap
+
+      let audioCtx
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+      }
+      if (audioCtx.state === 'suspended') await audioCtx.resume()
+
+      // El punto de partida es el reloj interno del hardware
+      let tiempoDeInicio = audioCtx.currentTime + 0.1; // Pequeño margen de seguridad
+
       for (let i = 0; i < auxtec.length; i++) {
-        await mostrar(auxtec[i])
+        const tec = auxtec[i]
+        let audio = getAudio(tec)
+        if (audio) {
+          const res = await fetch(audio.src) // `sound/${tec}.mp3`
+          const arrayBuffer = await res.arrayBuffer()
+          const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer)
+
+          const fuente = audioCtx.createBufferSource()
+          fuente.buffer = audioBuffer
+          fuente.connect(audioCtx.destination)
+
+          fuente.onended = () => {
+          }
+          // Programamos el sonido en su momento exacto
+          fuente.start(tiempoDeInicio);
+
+          // El siguiente sonido empezará cuando acabe este + el intervalo
+          tiempoDeInicio += audioBuffer.duration + (window.TIME / 1000);
+          //////////////////
+          preguntaDiv.innerHTML = tec
+          clearImage()
+          pintarPreguntado()
+          // audio.play()
+          const durationMS = Math.ceil(audio.duration * 1000)
+          await sleepRAF(durationMS)
+        }
         await sleepRAF(window.TIME)
       }
-      await rngComboChagui()
+      // await rngComboChagui()
     }
 
     var auto = document.querySelector("#auto");
