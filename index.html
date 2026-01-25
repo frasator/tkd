@@ -7,6 +7,19 @@
   <script src="tecnicas.js"></script>
 
   <script>
+    function sleepRAF(ms) {
+      return new Promise(resolve => {
+        const start = performance.now()
+        function check(now) {
+          if (now - start >= ms) {
+            resolve()
+          } else {
+            requestAnimationFrame(check)
+          }
+        }
+        requestAnimationFrame(check)
+      })
+    }
     function forEachTecnica(fn) {
       for (let tipo in tecnicas) {
         for (let cinto in tecnicas[tipo]) {
@@ -143,9 +156,9 @@
   <div id="medio">
     <div id="preguntas">
       <div class="botones">
-        <span id="examen" class="btn">Examen Voz</span>
-        <span id="auto" class="btn">Todo Voz</span>
-        <span id="generar" class="btn">Mostrar todas</span>
+        <span id="examen" class="btn">🎲 Examen Voz</span>
+        <span id="auto" class="btn">🎲 Todo Voz</span>
+        <span id="generar" class="btn">🎲 Mostrar todo</span>
         <span id="mostrar" class="btn">Imagen</span>
         <div id="timeBtn" class="btn time">&#128343;</div>
         <span id="reiniciar" class="btn reiniciar">Reiniciar</span>
@@ -475,10 +488,10 @@
     }
 
     var combinacionEl = document.querySelector("#combinacion");
-    combinacionEl.addEventListener('click', (e) => {
-      rngComboChagui()
+    combinacionEl.addEventListener('click', async (e) => {
+      await rngComboChagui()
     })
-    var rngComboChagui = () => {
+    async function rngComboChagui() {
       let comboLength = randomInt(3, 4)
       let arr = window['chagui']
       let chaguis = []
@@ -493,20 +506,14 @@
           break
         }
       }
-      let delays = [0]
+      clearImage()
       for (let i = 0; i < chaguis.length; i++) {
         let audio = getAudio(chaguis[i])
-        let prevDelay = delays[i]
-        delays.push(Math.ceil((audio.duration * 1000)) + prevDelay + 200)
-      }
-      for (let i = 0; i < chaguis.length; i++) {
-        let audio = getAudio(chaguis[i])
-        setTimeout(() => {
-          audio.play()
-        }, delays[i])
+        audio.play()
+        const durationMS = Math.ceil(audio.duration * 1000)
+        await sleepRAF(durationMS + 500)
       }
       preguntaDiv.innerHTML = chaguis.join(', ');
-      return delays[delays.length - 1] + 2000
     }
 
 
@@ -518,17 +525,12 @@
       let mostrar = async (tec) => {
         let audio = getAudio(tec)
         if (audio) {
-          const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-          if (audioCtx.state === 'suspended') {
-            await audioCtx.resume()
-          }
-          //
           preguntaDiv.innerHTML = tec
           clearImage()
           pintarPreguntado()
           audio.play()
           const durationMS = Math.ceil(audio.duration * 1000)
-          await new Promise(resolve => setTimeout(resolve, durationMS))
+          await sleepRAF(durationMS)
         }
       }
       let auxtec = []
@@ -570,9 +572,9 @@
 
       for (let i = 0; i < auxtec.length; i++) {
         await mostrar(auxtec[i])
-        await new Promise(resolve => setTimeout(resolve, window.TIME))
+        await sleepRAF(window.TIME)
       }
-      rngComboChagui()
+      await rngComboChagui()
     }
 
     var auto = document.querySelector("#auto");
@@ -583,17 +585,12 @@
       let mostrar = async (tec) => {
         let audio = getAudio(tec)
         if (audio) {
-          const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-          if (audioCtx.state === 'suspended') {
-            await audioCtx.resume()
-          }
-          //
           preguntaDiv.innerHTML = tec
           clearImage()
           pintarPreguntado()
           audio.play()
           const durationMS = Math.ceil(audio.duration * 1000)
-          await new Promise(resolve => setTimeout(resolve, durationMS))
+          await sleepRAF(durationMS)
         }
       }
       auxtec = []
@@ -635,7 +632,7 @@
       }
       for (let i = 0; i < auxtec.length; i++) {
         await mostrar(auxtec[i])
-        await new Promise(resolve => setTimeout(resolve, window.TIME))
+        await sleepRAF(window.TIME)
       }
     }
 
