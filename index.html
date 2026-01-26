@@ -161,20 +161,28 @@
 
   <div id="medio">
     <div id="preguntas">
-      <div class="botones">
-        <div id="examen" class="btn"><div>&#x26A1;</div><div>Examen</div></div>
+      <div class="botones" style="gap:4px;padding-bottom:4px;">
+        <div id="examen" class="btn">
+          <div>⚡</div>
+          <div>Examen</div>
+        </div>
         <div id="auto" class="btn">Examen</div>
         <div id="generar" class="btn">Ver&nbsp;Todo</div>
         <div id="mostrar" class="btn">Imagen</div>
         <div id="timeBtn" class="btn time">&#128343;</div>
         <div id="reiniciar" class="btn reiniciar"><b>↻</b></div>
       </div>
-      <div class="botones">
+      <div class="botones" style="gap:4px; font-size:0.85em">
         <div class="btn sog" data-tecnica="sogui">Sogui</div>
+        <div class="btn sog nogrow" data-tecnica-examen="sogui">⚡</div>
         <div class="btn mak" data-tecnica="maki">Maki</div>
+        <div class="btn mak nogrow" data-tecnica-examen="maki">⚡</div>
         <div class="btn gon" data-tecnica="gongkiok">Gong&nbsp;Kiok</div>
+        <div class="btn gon nogrow" data-tecnica-examen="gongkiok">⚡</div>
         <div class="btn pum" data-tecnica="pum">Pum</div>
+        <div class="btn pum nogrow" data-tecnica-examen="pum">⚡</div>
         <div class="btn bal" data-tecnica="chagui">Chagui</div>
+        <div class="btn bal nogrow" data-tecnica-examen="chagui">⚡</div>
         <div class="btn com" id="combinacion">Combo</div>
       </div>
       <div style="display:flex;align-items: stretch;">
@@ -513,13 +521,9 @@
         }
       }
       clearImage()
-      for (let i = 0; i < chaguis.length; i++) {
-        let audio = getAudio(chaguis[i])
-        audio.play()
-        const durationMS = Math.ceil(audio.duration * 1000)
-        await sleepRAF(durationMS + 500)
-      }
-      preguntaDiv.innerHTML = chaguis.join(', ');
+      await reproducirAudioTecnicas(chaguis, async (tec) => {
+        preguntaDiv.innerHTML = chaguis.join(', ')
+      })
     }
 
     async function prepararFuente(audioCtx, url) {
@@ -537,46 +541,7 @@
       return { fuente, audioBuffer }
     }
 
-    var examen = document.querySelector("#examen");
-    examen.addEventListener('click', examenAleatorio)
-    async function examenAleatorio() {
-      let auxtec = []
-      let numeroSoguis = getNumeroPreguntasPorTecnica('sogui')
-      for (let i = 0; i < numeroSoguis; i++) {
-        let tecnica = rng('sogui')
-        if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
-        }
-      }
-      let numeroMakis = getNumeroPreguntasPorTecnica('maki')
-      for (let i = 0; i < numeroMakis; i++) {
-        let tecnica = rng('maki')
-        if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
-        }
-      }
-      let numeroGongkioks = getNumeroPreguntasPorTecnica('gongkiok')
-      for (let i = 0; i < numeroGongkioks; i++) {
-        let tecnica = rng('gongkiok')
-        if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
-        }
-      }
-      let numeroPums = getNumeroPreguntasPorTecnica('pum')
-      for (let i = 0; i < numeroPums; i++) {
-        let tecnica = rng('pum')
-        if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
-        }
-      }
-      let numeroChaguis = getNumeroPreguntasPorTecnica('chagui')
-      for (let i = 0; i < numeroChaguis; i++) {
-        let tecnica = rng('chagui')
-        if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
-        }
-      }
-
+    async function reproducirAudioTecnicas(listaTecnicas, onTecnicaReproducida = (tec) => { }) {
       // Para que reproduzca un audio y se active, es como si pulsamos en una tecnica suelta
       let audio = getAudio('silencio')
       audio.play()
@@ -593,18 +558,19 @@
       // El punto de partida es el reloj interno del hardware
       let tiempoDeInicio = audioCtx.currentTime + 0.1; // Pequeño margen de seguridad
 
-      for (let i = 0; i < auxtec.length; i++) {
-        const tec = auxtec[i]
+      for (let i = 0; i < listaTecnicas.length; i++) {
+        const tec = listaTecnicas[i]
         let audio = getAudio(tec)
         let silencio = getAudio('silencio')
         if (audio) {
           const r = await prepararFuente(audioCtx, audio.src)
           const rs = await prepararFuente(audioCtx, silencio.src)
 
-          rs.fuente.onended = () => {
+          rs.fuente.onended = async () => {
             preguntaDiv.innerHTML = tec
             clearImage()
             pintarPreguntado()
+            await onTecnicaReproducida(tec)
           }
           // Programamos el sonido en su momento exacto
           rs.fuente.start(tiempoDeInicio)
@@ -616,84 +582,108 @@
       }
     }
 
+    var examen = document.querySelector("#examen");
+    examen.addEventListener('click', examenAleatorio)
+    async function examenAleatorio() {
+      const listaTecnicas = []
+      let numeroSoguis = getNumeroPreguntasPorTecnica('sogui')
+      for (let i = 0; i < numeroSoguis; i++) {
+        let tecnica = rng('sogui')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          listaTecnicas.push(tecnica)
+        }
+      }
+      let numeroMakis = getNumeroPreguntasPorTecnica('maki')
+      for (let i = 0; i < numeroMakis; i++) {
+        let tecnica = rng('maki')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          listaTecnicas.push(tecnica)
+        }
+      }
+      let numeroGongkioks = getNumeroPreguntasPorTecnica('gongkiok')
+      for (let i = 0; i < numeroGongkioks; i++) {
+        let tecnica = rng('gongkiok')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          listaTecnicas.push(tecnica)
+        }
+      }
+      let numeroPums = getNumeroPreguntasPorTecnica('pum')
+      for (let i = 0; i < numeroPums; i++) {
+        let tecnica = rng('pum')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          listaTecnicas.push(tecnica)
+        }
+      }
+      let numeroChaguis = getNumeroPreguntasPorTecnica('chagui')
+      for (let i = 0; i < numeroChaguis; i++) {
+        let tecnica = rng('chagui')
+        if (tecnica.toLowerCase().indexOf('completo') == -1) {
+          listaTecnicas.push(tecnica)
+        }
+      }
+
+      await reproducirAudioTecnicas(listaTecnicas)
+    }
+
     var auto = document.querySelector("#auto");
     auto.addEventListener('click', todoAuto)
     async function todoAuto() {
-      auxtec = []
+      const listaTecnicas = []
       var tecnica = ""
       var i = 0
       while (tecnica.toLowerCase().indexOf('completo') == -1) {
         tecnica = rng('sogui')
         if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
+          listaTecnicas.push(tecnica)
         }
       }
       var tecnica = ""
       while (tecnica.toLowerCase().indexOf('completo') == -1) {
         tecnica = rng('maki')
         if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
+          listaTecnicas.push(tecnica)
         }
       }
       var tecnica = ""
       while (tecnica.toLowerCase().indexOf('completo') == -1) {
         tecnica = rng('gongkiok')
         if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
+          listaTecnicas.push(tecnica)
         }
       }
       var tecnica = ""
       while (tecnica.toLowerCase().indexOf('completo') == -1) {
         tecnica = rng('pum')
         if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
+          listaTecnicas.push(tecnica)
         }
       }
       var tecnica = ""
       while (tecnica.toLowerCase().indexOf('completo') == -1) {
         tecnica = rng('chagui')
         if (tecnica.toLowerCase().indexOf('completo') == -1) {
-          auxtec.push(tecnica)
+          listaTecnicas.push(tecnica)
         }
       }
+      await reproducirAudioTecnicas(listaTecnicas)
+    }
 
-      // Para que reproduzca un audio y se active, es como si pulsamos en una tecnica suelta
-      let audio = getAudio('silencio')
-      audio.play()
 
-      // Inicializar contexto en el primer tap
-      let audioCtx
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-      }
-      if (audioCtx.state === 'suspended') {
-        await audioCtx.resume()
-      }
-
-      // El punto de partida es el reloj interno del hardware
-      let tiempoDeInicio = audioCtx.currentTime + 0.1; // Pequeño margen de seguridad
-
-      for (let i = 0; i < auxtec.length; i++) {
-        const tec = auxtec[i]
-        let audio = getAudio(tec)
-        let silencio = getAudio('silencio')
-        if (audio) {
-          const r = await prepararFuente(audioCtx, audio.src)
-          const rs = await prepararFuente(audioCtx, silencio.src)
-
-          rs.fuente.onended = () => {
-            preguntaDiv.innerHTML = tec
-            clearImage()
-            pintarPreguntado()
+    var examenTecEls = document.querySelectorAll("[data-tecnica-examen]")
+    for (let i = 0; i < examenTecEls.length; i++) {
+      let examenTecEl = examenTecEls[i]
+      examenTecEl.addEventListener('click', async (e) => {
+        var el = e.currentTarget
+        const listaTecnicas = []
+        let tecnica = ""
+        while (tecnica.toLowerCase().indexOf('completo') == -1) {
+          tecnica = rng(el.dataset.tecnicaExamen) // i.e: sogui
+          if (tecnica.toLowerCase().indexOf('completo') == -1) {
+            listaTecnicas.push(tecnica)
           }
-          // Programamos el sonido en su momento exacto
-          rs.fuente.start(tiempoDeInicio)
-          r.fuente.start(tiempoDeInicio)
-
-          // El siguiente sonido empezará cuando acabe este + el intervalo
-          tiempoDeInicio += r.audioBuffer.duration + (window.TIME / 1000);
         }
-      }
+        await reproducirAudioTecnicas(listaTecnicas)
+      })
     }
 
 
