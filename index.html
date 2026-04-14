@@ -173,7 +173,7 @@
 
   <div id="medio">
     <div id="preguntas">
-      <div class="botones" style="gap:4px;padding-bottom:4px;">
+      <div class="botones" style="gap:4px;font-size:0.9em;padding-bottom:4px;">
         <div id="examen" class="btn">
           <div>⚡</div>
           <div>Examen</div>
@@ -184,12 +184,12 @@
         <div id="timeBtn" class="btn time">&#128343;</div>
         <div id="reiniciar" class="btn reiniciar"><b>↻</b></div>
       </div>
-      <div class="botones" style="gap:4px; font-size:0.85em">
+      <div class="botones" style="gap:4px; font-size:0.8em">
         <div class="btn sog" data-tecnica="sogui">Sogui</div>
         <div class="btn sog nogrow" data-tecnica-examen="sogui">⚡</div>
         <div class="btn mak" data-tecnica="maki">Maki</div>
         <div class="btn mak nogrow" data-tecnica-examen="maki">⚡</div>
-        <div class="btn gon" data-tecnica="gongkiok">Gong&nbsp;Kiok</div>
+        <div class="btn gon" data-tecnica="gongkiok" style="display: flex; flex-direction: column;font-size:0.8em"><div>Gong</div><div>Kiok</div></div>
         <div class="btn gon nogrow" data-tecnica-examen="gongkiok">⚡</div>
         <div class="btn pum" data-tecnica="pum">Pum</div>
         <div class="btn pum nogrow" data-tecnica-examen="pum">⚡</div>
@@ -197,8 +197,8 @@
         <div class="btn bal nogrow" data-tecnica-examen="chagui">⚡</div>
         <div class="btn com" id="combinacion">Combo</div>
       </div>
-      <div style="display:flex;align-items: stretch;">
-        <div id="pregunta" style="flex-grow:1;height:300px"></div>
+      <div style="display:flex;align-items: center;flex-grow: 1;">
+        <div id="pregunta"></div>
         <div id="imagen">
           <img id="img" onerror="this.classList.add('error')" onload="this.classList.remove('error')">
         </div>
@@ -561,7 +561,8 @@
       }
       clearImage()
       await reproducirAudioTecnicas(chaguis, async (tec) => {
-        preguntaDiv.innerHTML = chaguis.map(c=>getTecnicaHTML(c)).join(', ')
+        let chaguisHTML = chaguis.map(c=>getTecnicaHTML(c)).join(', ')
+        preguntaDiv.innerHTML = `<span style="font-size:0.7em">${chaguisHTML}</span>`
       })
     }
 

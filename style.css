@@ -23,7 +23,7 @@ body * {
 
 #medio {
   position: relative;
-  height: 500px;
+  height: 250px;
   border-bottom: 2px solid #16191d;
   background-color: #2c3139;
 }
@@ -39,8 +39,9 @@ body * {
 
 #abajo {
   position: relative;
-  height: calc(99% - 750px);
+  height: calc(100% - 500px);
   font-size: 1.5vh;
+  border-bottom: 5px solid #16191d;
 }
 
 ::-webkit-scrollbar {
@@ -62,7 +63,15 @@ body {
 }
 
 #preguntas {
+  display: flex;
+  flex-direction: column;
   height: 100%;
+}
+
+#pregunta {
+  padding: 0 0 0 10px;
+  text-transform: capitalize;
+  font-size: 1.2em;
 }
 
 .cinto {
@@ -244,12 +253,6 @@ body {
   flex-grow: 1;
 }
 
-#pregunta {
-  padding: 20px 0 0 20px;
-  text-transform: capitalize;
-  font-size: 1.7em;
-}
-
 #imagen {
   display: flex;
   justify-content: center;
@@ -402,19 +405,19 @@ body {
   content: counter(section) '';
   color: #fccab3;
   font-family: monospace;
+  font-size:0.9em;
 }
 
 .icono-cinturon {
   display: inline-block;
   width: 24px;
   height: 20px;
-  margin-bottom: 4px;
   margin-left: 6px;
-  border: 1px solid #000;
   border-radius: 2px;
   vertical-align: middle;
+  margin-bottom:1px;
   text-align: center;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .blanco-amarillo {
@@ -458,10 +461,10 @@ body {
 }
 
 .icono-cinturon[class*="-dan"] {
-  border: 1px solid goldenrod;
+  box-shadow: 0 0 1px 1px rgba(218, 156, 32, 0.5);
   color: goldenrod;
   background: #000000;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .icono-cinturon.segundo-dan::after {
@@ -486,6 +489,10 @@ body {
 
 .icono-cinturon.septimo-dan::after {
   content: "7";
+}
+
+.icono-cinturon.undefined {
+  display: none;
 }
 
 
