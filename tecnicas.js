@@ -189,13 +189,12 @@ window.tecnicas = {
     },
     "segundo-dan": {
         "sogui": [
-            "Jakdari Sogui"
+            "Ap Koa Sogui"
         ],
         "maki": [
             "Jansonnal Are Maki",
-            "Nulo Maki",
             "An Palmok Gechio Momtong Maki",
-            "Jansonnal Momtong Maki"
+            "Batangson Nulo Maki",
         ],
         "gongkiok": [
             "Sonnal Bakat Chigui",
@@ -210,10 +209,6 @@ window.tecnicas = {
             "Chagun Dol Chogui",
             "Dangkio Are Pionson Kut Checho Chirugui",
             "Me Chumok Are Piochok Chigui",
-            "Batagson Tok Chigui",
-            "Kumgang Maki",
-            "Kun Dol Chogui",
-            "Santul Maki"
         ],
         "chagui": [
             "Tuio Mom Dollyo Nacko Chagui",
@@ -222,22 +217,24 @@ window.tecnicas = {
     },
     "tercer-dan": {
         "sogui": [
-            "Ap Koa Sogui"
+            "Jakdari Sogui"
         ],
         "maki": [
+            "Jansonnal Momtong Maki",
             "Sonnal Gechio Are Maki",
-            "An Palmok Goduro Olgul Yop Maki"
+            "Goduro Sonnal Dung Momtong Bakat Maki",
         ],
         "gongkiok": [
-            "Palkup Ollyo Chigui"
+            "Palkup Ollyo Chigui",
+            "Pionson Kut Opo Chirugui",
         ],
         "pum": [
+            "Batagson Tok Chigui",
+            "Kumgang Maki",
+            "Kun Dol Chogui",
+            "Santul Maki",
             "Kolcho Maki",
             "An Palmok Kumgang Momtong Maki",
-            "Kiopson Chumbi",
-            "Mohe Chigui",
-            "Gechio Santul Maki",
-            "Dangkio Dung Chumok Ape Chigui"
         ],
         "chagui": [
             "Tuio Noppy Chagui",
@@ -248,24 +245,42 @@ window.tecnicas = {
         "sogui": [
         ],
         "maki": [
+            "An Palmok Goduro Olgul Yop Maki",
             "Sonnal Dung Gechio Momtong Maki",
-            "Goduro Sonnal Dung Momtong Bakat Maki",
             "Sonnal Okgoro Are Maki",
+        ],
+        "gongkiok": [
+        ],
+        "pum": [
+            "Kiopson Chumbi",
+            "Mohe Chigui",
+            "Gechio Santul Maki",
+            "Dangkio Dung Chumok Ape Chigui",
+            "Hwangso Maki",
+            "Sonbadak Goduro An Palmok Momtong Bakat Maki",
+            "Bawi Milgui",
+            "Gorro Olligui",
+            "Chetdari Jirugui",
+        ],
+        "chagui": [
+            "Tuio Ilya Chagui",
+            "Modumbal Ap Chagui",
+            "Modumbal Yop Chagui"
+        ]
+    },
+    "quinto-dan": {
+        "sogui": [
+        ],
+        "maki": [
             "An Palmok Momtong Bakat Maki",
             "Jansonnal Olgul Maki",
             "Yop Are Maki",
             "An Palmok Goduro Momtong Maki"
         ],
         "gongkiok": [
-            "Pionson Kut Opo Chirugui",
             "Bam Chumok Sosum Chigui"
         ],
         "pum": [
-            "Hwangso Maki",
-            "Sonbadak Goduro An Palmok Momtong Bakat Maki",
-            "Bawi Milgui",
-            "Gorro Olligui",
-            "Chetdari Jirugui",
             "Kumgang Ap Jirugui",
             "Me Chumok Yop Momtong Piochok Chigui",
             "Nalgue Piogui",
@@ -276,20 +291,13 @@ window.tecnicas = {
             "Taesan Milgui"
         ],
         "chagui": [
-            "Tuio Ilya Chagui",
-            "Modumbal Ap Chagui",
-            "Modumbal Yop Chagui"
         ]
     },
-    "quinto-dan": {
+    "sexto-dan": {
         "sogui": [
             "Kiotari Sogui",
-            "Ogum Sogui"
-
         ],
         "maki": [
-            "Okgoro Olgul Maki",
-            "Sonnal Oe Santul Maki"
         ],
         "gongkiok": [
             "Du Me Chumok Yang Yopguri Chigui"
@@ -297,6 +305,20 @@ window.tecnicas = {
         "pum": [
             "An Palmok Are Piochok Maki",
             "Sonnal Kumgang Are Maki",
+        ],
+        "chagui": [
+        ]
+    },
+    "septimo-dan": {
+        "sogui": [
+            "Ogum Sogui"
+        ],
+        "maki": [
+            "Okgoro Olgul Maki",
+        ],
+        "gongkiok": [
+        ],
+        "pum": [
             "Oe Santul Yop Chagui",
             "Du Chumok Jori Chumbi"
         ],
@@ -307,33 +329,43 @@ window.tecnicas = {
 
 window.NUMERO_PREGUNTAS = {
     'sogui': {
-        'segundo-dan': 4,
-        'tercer-dan': 4,
-        'cuarto-dan': 5,
-        'quinto-dan': 5
+        'segundo-dan': 8,
+        'tercer-dan': 8,
+        'cuarto-dan': 8,
+        'quinto-dan': 10,
+        'sexto-dan': 10,
+        'septimo-dan': 10
     },
     'maki': {
-        'segundo-dan': 4,
-        'tercer-dan': 4,
-        'cuarto-dan': 5,
-        'quinto-dan': 5
+        'segundo-dan': 8,
+        'tercer-dan': 8,
+        'cuarto-dan': 8,
+        'quinto-dan': 10,
+        'sexto-dan': 10,
+        'septimo-dan': 10
     },
     'gongkiok': {
-        'segundo-dan': 4,
-        'tercer-dan': 4,
-        'cuarto-dan': 5,
-        'quinto-dan': 5
+        'segundo-dan': 8,
+        'tercer-dan': 8,
+        'cuarto-dan': 8,
+        'quinto-dan': 10,
+        'sexto-dan': 10,
+        'septimo-dan': 10
     },
     'pum': {
-        'segundo-dan': 3,
-        'tercer-dan': 4,
-        'cuarto-dan': 4,
-        'quinto-dan': 4
+        'segundo-dan': 8,
+        'tercer-dan': 8,
+        'cuarto-dan': 8,
+        'quinto-dan': 10,
+        'sexto-dan': 10,
+        'septimo-dan': 10
     },
     'chagui': {
-        'segundo-dan': 4,
-        'tercer-dan': 4,
-        'cuarto-dan': 5,
-        'quinto-dan': 5
+        'segundo-dan': 8,
+        'tercer-dan': 8,
+        'cuarto-dan': 8,
+        'quinto-dan': 10,
+        'sexto-dan': 10,
+        'septimo-dan': 10
     }
 }

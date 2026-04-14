@@ -113,6 +113,18 @@
           </div>
           <div class="color"></div>
         </div>
+        <div class="cinto" data-cinturon="sexto-dan">
+          <div class="name namedan">
+            <div>VI</div>
+          </div>
+          <div class="color"></div>
+        </div>
+        <div class="cinto" data-cinturon="septimo-dan">
+          <div class="name namedan">
+            <div>VII</div>
+          </div>
+          <div class="color"></div>
+        </div>
       </div>
       <div id="cinturonesBot">
         <div class="cinto" data-cinturon="blanco-amarillo">
@@ -255,6 +267,8 @@
       'tercer-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan'],
       'cuarto-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan', 'cuarto-dan'],
       'quinto-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan', 'cuarto-dan', 'quinto-dan'],
+      'sexto-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan', 'cuarto-dan', 'quinto-dan', 'sexto-dan'],
+      'septimo-dan': ['blanco-amarillo', 'amarillo', 'amarillo-naranja', 'naranja', 'naranja-verde', 'verde', 'verde-azul', 'azul', 'azul-rojo', 'rojo', 'segundo-dan', 'tercer-dan', 'cuarto-dan', 'quinto-dan', 'sexto-dan', 'septimo-dan'],
     }
     var colores = {
       'blanco-amarillo': ['#FFFFFF', '#FBC02D'],
@@ -270,7 +284,9 @@
       'segundo-dan': ['#000000', '#000000'],
       'tercer-dan': ['#000000', '#000000'],
       'cuarto-dan': ['#000000', '#000000'],
-      'quinto-dan': ['#000000', '#000000']
+      'quinto-dan': ['#000000', '#000000'],
+      'sexto-dan': ['#000000', '#000000'],
+      'septimo-dan': ['#000000', '#000000'],
     }
 
     var sogui, maki, gongkiok, pum, chagui, todas;
@@ -331,24 +347,33 @@
       preguntadoDiv.innerHTML = ""
     }
 
-    var rng = (tecnica) => {
-      if (window[tecnica] != null) {
-        var arr = window[tecnica];
-        var idx = randomInt(0, arr.length - 1)
+    const rng = (tecnica, isRandom = true) => {
+      // Verificamos que existan los datos necesarios
+      if (!window[tecnica] || !preguntado[tecnica]) return "";
 
-        var pl = Object.keys(preguntado[tecnica]).length;
-        if (pl == arr.length) {
-          return tecnica + " completo";
-        } else {
-          if (preguntado[tecnica].hasOwnProperty(arr[idx])) {
-            return rng(tecnica);
-          } else {
-            preguntado[tecnica][arr[idx]] = true;
-            return arr[idx];
-          }
-        }
+      const arr = window[tecnica];
+      const yaPreguntados = Object.keys(preguntado[tecnica]);
+
+      // Si ya completamos todos, cortamos de inmediato
+      if (yaPreguntados.length >= arr.length) {
+        return `${tecnica} completo`
       }
-      return ""
+
+      let seleccionado;
+
+      if (isRandom) {
+        // --- Lógica Aleatoria (Segura, sin recursión) ---
+        const pendientes = arr.filter(item => !preguntado[tecnica].hasOwnProperty(item));
+        const idxRandom = Math.floor(Math.random() * pendientes.length);
+        seleccionado = pendientes[idxRandom];
+      } else {
+        // --- Lógica Secuencial ---
+        seleccionado = arr[yaPreguntados.length];
+      }
+
+      // Registrar y retornar
+      preguntado[tecnica][seleccionado] = true;
+      return seleccionado
     }
 
     var imagenEl = document.querySelector("#imagen")
@@ -418,7 +443,7 @@
     var generar = (tecnica) => {
       var notDone = true;
       while (notDone) {
-        var nuevaTecnica = rng(tecnica);
+        var nuevaTecnica = rng(tecnica, false) // con false no es aleatorio
         preguntaDiv.innerHTML = nuevaTecnica
         clearImage()
         pintarPreguntado()
