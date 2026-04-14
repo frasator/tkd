@@ -223,6 +223,7 @@ window.tecnicas = {
             "Jansonnal Momtong Maki",
             "Sonnal Gechio Are Maki",
             "Goduro Sonnal Dung Momtong Bakat Maki",
+            "Sonnal Okgoro Are Maki",
         ],
         "gongkiok": [
             "Palkup Ollyo Chigui",
@@ -247,7 +248,6 @@ window.tecnicas = {
         "maki": [
             "An Palmok Goduro Olgul Yop Maki",
             "Sonnal Dung Gechio Momtong Maki",
-            "Sonnal Okgoro Are Maki",
         ],
         "gongkiok": [
         ],

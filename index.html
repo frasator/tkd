@@ -289,6 +289,19 @@
       'septimo-dan': ['#000000', '#000000'],
     }
 
+    var cinturonPorTecnica = {}
+    for (let cituron in tecnicas) {
+      for (let tipo in tecnicas[cituron]) {
+        for (let i = 0; i < tecnicas[cituron][tipo].length; i++) {
+          let tecnica = tecnicas[cituron][tipo][i]
+          cinturonPorTecnica[tecnica] = cituron
+        }
+      }
+    }
+    var getTecnicaHTML = (tecnica) => {
+      return `<span class="icono-cinturon ${cinturonPorTecnica[tecnica]}"></span> ${tecnica}`
+    }
+
     var sogui, maki, gongkiok, pum, chagui, todas;
     var prepararTecnicas = (cinturon) => {
       setCookie('cinturon', cinturon)
@@ -318,6 +331,7 @@
       todas = todas.concat(pum);
       todas = todas.concat(chagui);
       pintarPreguntado();
+
     }
 
     var preguntado = {
@@ -429,7 +443,7 @@
       tecEl.addEventListener('click', (e) => {
         var el = e.currentTarget;
         let rngTecnica = rng(el.dataset.tecnica)
-        preguntaDiv.innerHTML = rngTecnica
+        preguntaDiv.innerHTML = getTecnicaHTML(rngTecnica)
         clearImage()
         let audio = getAudio(rngTecnica)
         if (audio != null) {
@@ -444,7 +458,7 @@
       var notDone = true;
       while (notDone) {
         var nuevaTecnica = rng(tecnica, false) // con false no es aleatorio
-        preguntaDiv.innerHTML = nuevaTecnica
+        preguntaDiv.innerHTML = getTecnicaHTML(nuevaTecnica)
         clearImage()
         pintarPreguntado()
         if (nuevaTecnica.indexOf('completo') != -1) {
@@ -477,15 +491,15 @@
         str += '<div class="tit-historia">';
         var tec = preguntado[grupo];
         for (var tecnica in tec) {
-          str += "<div class='tec'>" + tecnica + "</div>";
+          str += `<div class='tec'>${getTecnicaHTML(tecnica)}</div>`
         }
-        str += "</div>";
+        str += "</div>"
       }
       preguntadoDiv.innerHTML = str
       preguntadoDiv.querySelectorAll('.tec').forEach(tecEl => {
         tecEl.addEventListener('click', async (e) => {
           const tecnica = e.target.innerText.trim()
-          preguntaDiv.innerHTML = tecnica
+          preguntaDiv.innerHTML = getTecnicaHTML(tecnica)
           setImage(tecnica)
           toggleImage(true)
         })
@@ -547,7 +561,7 @@
       }
       clearImage()
       await reproducirAudioTecnicas(chaguis, async (tec) => {
-        preguntaDiv.innerHTML = chaguis.join(', ')
+        preguntaDiv.innerHTML = chaguis.map(c=>getTecnicaHTML(c)).join(', ')
       })
     }
 
@@ -592,7 +606,7 @@
           const rs = await prepararFuente(audioCtx, silencio.src)
 
           rs.fuente.onended = async () => {
-            preguntaDiv.innerHTML = tec
+            preguntaDiv.innerHTML = getTecnicaHTML(tec)
             clearImage()
             pintarPreguntado()
             await onTecnicaReproducida(tec)
