@@ -189,7 +189,10 @@
         <div class="btn sog nogrow" data-tecnica-examen="sogui">⚡</div>
         <div class="btn mak" data-tecnica="maki">Maki</div>
         <div class="btn mak nogrow" data-tecnica-examen="maki">⚡</div>
-        <div class="btn gon" data-tecnica="gongkiok" style="display: flex; flex-direction: column;font-size:0.8em"><div>Gong</div><div>Kiok</div></div>
+        <div class="btn gon" data-tecnica="gongkiok" style="display: flex; flex-direction: column;font-size:0.8em">
+          <div>Gong</div>
+          <div>Kiok</div>
+        </div>
         <div class="btn gon nogrow" data-tecnica-examen="gongkiok">⚡</div>
         <div class="btn pum" data-tecnica="pum">Pum</div>
         <div class="btn pum nogrow" data-tecnica-examen="pum">⚡</div>
@@ -233,25 +236,6 @@
   </div>
 
   <script>
-    let savedTIME = parseInt(localStorage.getItem('TIME'))
-    window.TIME = isNaN(savedTIME) ? 10000 : savedTIME
-    var timeBtn = document.querySelector("#timeBtn")
-    timeBtn.addEventListener('click', (e) => {
-      let resultado = window.prompt("Intervalo de tiempo entre técnicas (segundos)", window.TIME / 1000)
-      if (resultado != null) {
-        const parsedTIME = parseFloat(resultado)
-        if (!isNaN(parsedTIME)) {
-          window.TIME = parsedTIME * 1000
-          localStorage.setItem('TIME', window.TIME)
-          location.reload()
-        }
-      }
-    })
-
-
-    function randomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1) + min);
-    }
     var acumulativo = {
       'blanco-amarillo': ['blanco-amarillo'],
       'amarillo': ['blanco-amarillo', 'amarillo'],
@@ -289,6 +273,87 @@
       'septimo-dan': ['#000000', '#000000'],
     }
 
+    var preguntado = {
+      sogui: {},
+      maki: {},
+      gongkiok: {},
+      pum: {},
+      chagui: {}
+    }
+
+    var preguntaDiv = document.querySelector("#pregunta")
+    var preguntadoDiv = document.querySelector("#preguntado")
+    var cintoEls = document.querySelectorAll("[data-cinturon]")
+    var reiniciarEl = document.querySelector("#reiniciar")
+    var timeBtn = document.querySelector("#timeBtn")
+    var imagenEl = document.querySelector("#imagen")
+    var img = document.querySelector("#img")
+    var mostrarBtn = document.querySelector("#mostrar")
+    var tecEls = document.querySelectorAll("[data-tecnica]")
+    var generarBtn = document.querySelector("#generar")
+    var combinacionEl = document.querySelector("#combinacion")
+    var examen = document.querySelector("#examen")
+    var auto = document.querySelector("#auto")
+    var examenTecEls = document.querySelectorAll("[data-tecnica-examen]")
+
+    window.addEventListener('click', async () => {
+      let audio = await getAudio('silencio')
+      audio.play()
+    }, { once: false })
+
+    for (var i = 0; i < cintoEls.length; i++) {
+      var cintoEl = cintoEls[i];
+      cintoEl.addEventListener('click', async (e) => {
+        var el = e.currentTarget;
+        prepararTecnicas(el.dataset.cinturon)
+      })
+    }
+
+    if (getCookie('cinturon') == '') {
+      prepararTecnicas('rojo')
+    } else {
+      prepararTecnicas(getCookie('cinturon'))
+    }
+
+    function reset() {
+      toggleImage(false)
+      todas = [];
+      sogui = [];
+      maki = [];
+      gongkiok = [];
+      pum = [];
+      chagui = [];
+
+      preguntado = {
+        sogui: {},
+        maki: {},
+        gongkiok: {},
+        pum: {},
+        chagui: {}
+      };
+      preguntaDiv.innerHTML = ""
+      preguntadoDiv.innerHTML = ""
+    }
+
+    let savedTIME = parseInt(localStorage.getItem('TIME'))
+    window.TIME = isNaN(savedTIME) ? 10000 : savedTIME
+    timeBtn.addEventListener('click', (e) => {
+      let resultado = window.prompt("Intervalo de tiempo entre técnicas (segundos)", window.TIME / 1000)
+      if (resultado != null) {
+        const parsedTIME = parseFloat(resultado)
+        if (!isNaN(parsedTIME)) {
+          window.TIME = parsedTIME * 1000
+          localStorage.setItem('TIME', window.TIME)
+          location.reload()
+        }
+      }
+    })
+
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
     var cinturonPorTecnica = {}
     for (let cituron in tecnicas) {
       for (let tipo in tecnicas[cituron]) {
@@ -298,12 +363,12 @@
         }
       }
     }
-    var getTecnicaHTML = (tecnica) => {
+    function getTecnicaHTML(tecnica) {
       return `<span class="icono-cinturon ${cinturonPorTecnica[tecnica]}"></span> ${tecnica}`
     }
 
     var sogui, maki, gongkiok, pum, chagui, todas;
-    var prepararTecnicas = (cinturon) => {
+    function prepararTecnicas(cinturon) {
       setCookie('cinturon', cinturon)
       window['lastCinturon'] = cinturon;
       document.querySelector('#imgcinto').setAttribute('fill', colores[cinturon][1]);
@@ -334,34 +399,8 @@
 
     }
 
-    var preguntado = {
-      sogui: {},
-      maki: {},
-      gongkiok: {},
-      pum: {},
-      chagui: {}
-    };
-    var reset = () => {
-      toggleImage(false)
-      todas = [];
-      sogui = [];
-      maki = [];
-      gongkiok = [];
-      pum = [];
-      chagui = [];
 
-      preguntado = {
-        sogui: {},
-        maki: {},
-        gongkiok: {},
-        pum: {},
-        chagui: {}
-      };
-      preguntaDiv.innerHTML = ""
-      preguntadoDiv.innerHTML = ""
-    }
-
-    const rng = (tecnica, isRandom = true) => {
+    function rng(tecnica, isRandom = true) {
       // Verificamos que existan los datos necesarios
       if (!window[tecnica] || !preguntado[tecnica]) return "";
 
@@ -390,17 +429,15 @@
       return seleccionado
     }
 
-    var imagenEl = document.querySelector("#imagen")
-    var img = document.querySelector("#img")
     img.addEventListener('click', (e) => {
       clearImage()
     })
-    var clearImage = (tecnica) => {
+    function clearImage(tecnica) {
       img.setAttribute('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=')
       img.setAttribute('alt', '')
       img.classList.add('none')
     }
-    var setImage = (tecnica) => {
+    function setImage(tecnica) {
       if (tecnica != '' && !/completo/gi.test(tecnica) && !/todas/gi.test(tecnica)) {
         var imgName = tecnica.replace(/ /g, '-')
         const imageURL = `./images/${imgName}.png`
@@ -409,7 +446,7 @@
         img.classList.remove('none')
       }
     }
-    var toggleImage = (bool) => {
+    function toggleImage(bool) {
       const tecnica = preguntaDiv.innerText.trim()
       if (tecnica != '' && !/completo/gi.test(tecnica) && !/todas/gi.test(tecnica)) {
         setImage(tecnica)
@@ -420,32 +457,19 @@
         clearImage()
       }
     }
-    var mostrarBtn = document.querySelector("#mostrar")
     mostrarBtn.addEventListener('click', (e) => {
       toggleImage()
     })
 
     /* USE API TEST*/
-    var preguntaDiv = document.querySelector("#pregunta");
-    var preguntadoDiv = document.querySelector("#preguntado");
-    var cintoEls = document.querySelectorAll("[data-cinturon]");
-    var reiniciarEl = document.querySelector("#reiniciar");
-    for (var i = 0; i < cintoEls.length; i++) {
-      var cintoEl = cintoEls[i];
-      cintoEl.addEventListener('click', (e) => {
-        var el = e.currentTarget;
-        prepararTecnicas(el.dataset.cinturon);
-      });
-    }
-    var tecEls = document.querySelectorAll("[data-tecnica]")
     for (var i = 0; i < tecEls.length; i++) {
       var tecEl = tecEls[i];
-      tecEl.addEventListener('click', (e) => {
+      tecEl.addEventListener('click', async (e) => {
         var el = e.currentTarget;
         let rngTecnica = rng(el.dataset.tecnica)
         preguntaDiv.innerHTML = getTecnicaHTML(rngTecnica)
         clearImage()
-        let audio = getAudio(rngTecnica)
+        let audio = await getAudio(rngTecnica)
         if (audio != null) {
           audio.play()
         }
@@ -453,8 +477,7 @@
       })
     }
 
-    var generarBtn = document.querySelector("#generar");
-    var generar = (tecnica) => {
+    function generar(tecnica) {
       var notDone = true;
       while (notDone) {
         var nuevaTecnica = rng(tecnica, false) // con false no es aleatorio
@@ -483,7 +506,7 @@
       location.reload()
     });
 
-    var pintarPreguntado = () => {
+    function pintarPreguntado() {
       var str = "";
       for (var grupo in preguntado) {
         let countEl = document.querySelector(`#${grupo}Count`)
@@ -504,12 +527,6 @@
           toggleImage(true)
         })
       })
-    }
-
-    if (getCookie('cinturon') == '') {
-      prepararTecnicas("rojo")
-    } else {
-      prepararTecnicas(getCookie('cinturon'))
     }
 
     function setCookie(cname, cvalue) {
@@ -534,13 +551,15 @@
       return ""
     }
 
-    function getAudio(tecnica) {
+    async function getAudio(tecnica) {
       if (tecnica.toLowerCase().indexOf('completo') == -1) {
+        while (audioMap[tecnica] == null) {
+          await new Promise(r => setTimeout(r, 100))
+        }
         return audioMap[tecnica]
       }
     }
 
-    var combinacionEl = document.querySelector("#combinacion");
     combinacionEl.addEventListener('click', async (e) => {
       await rngComboChagui()
     })
@@ -561,7 +580,7 @@
       }
       clearImage()
       await reproducirAudioTecnicas(chaguis, async (tec) => {
-        let chaguisHTML = chaguis.map(c=>getTecnicaHTML(c)).join(', ')
+        let chaguisHTML = chaguis.map(c => getTecnicaHTML(c)).join(', ')
         preguntaDiv.innerHTML = `<span style="font-size:0.7em">${chaguisHTML}</span>`
       })
     }
@@ -583,7 +602,7 @@
 
     async function reproducirAudioTecnicas(listaTecnicas, onTecnicaReproducida = (tec) => { }) {
       // Para que reproduzca un audio y se active, es como si pulsamos en una tecnica suelta
-      let audio = getAudio('silencio')
+      let audio = await getAudio('silencio')
       audio.play()
 
       // Inicializar contexto en el primer tap
@@ -600,8 +619,8 @@
 
       for (let i = 0; i < listaTecnicas.length; i++) {
         const tec = listaTecnicas[i]
-        let audio = getAudio(tec)
-        let silencio = getAudio('silencio')
+        let audio = await getAudio(tec)
+        let silencio = await getAudio('silencio')
         if (audio) {
           const r = await prepararFuente(audioCtx, audio.src)
           const rs = await prepararFuente(audioCtx, silencio.src)
@@ -622,7 +641,6 @@
       }
     }
 
-    var examen = document.querySelector("#examen");
     examen.addEventListener('click', examenAleatorio)
     async function examenAleatorio() {
       const listaTecnicas = []
@@ -665,7 +683,6 @@
       await reproducirAudioTecnicas(listaTecnicas)
     }
 
-    var auto = document.querySelector("#auto")
     auto.addEventListener('click', todoAuto)
     async function todoAuto() {
       const listaTecnicas = []
@@ -709,7 +726,6 @@
     }
 
 
-    var examenTecEls = document.querySelectorAll("[data-tecnica-examen]")
     for (let i = 0; i < examenTecEls.length; i++) {
       let examenTecEl = examenTecEls[i]
       examenTecEl.addEventListener('click', async (e) => {
